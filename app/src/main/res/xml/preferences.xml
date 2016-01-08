@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Credentials">
+        <Preference android:title="Modify Login Credentials">
+            <intent android:action="com.cg.watbalance.login" />
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Notifications">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="dailyNotification"
+            android:summary="Allow WatBalance to display Balance Information in the Notification Tray"
+            android:title="Daily Notifications" />
+        <com.cg.watbalance.preferences.TimePickerPreference
+            android:defaultValue="07:00"
+            android:dependency="dailyNotification"
+            android:key="notificationTime"
+            android:title="Notification Time" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="About">
+        <Preference
+            android:summary="Developed by Xyan Bhatnagar"
+            android:title="WatBalance"></Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

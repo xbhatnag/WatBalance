@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">WatBalance</string>
+    <string name="MP">Meal Plan</string>
+    <string name="FD">Flex Dollars</string>
+    <string name="Other">Other</string>
+    <string name="WatCard">WatCard</string>
+    <string name="Date">Date</string>
+    <string name="IDNum">ID# 000000</string>
+    <string name="DefaultAmt">$0.0</string>
+    <string name="button_login">Login</string>
+    <string name="title_activity_login">Login Information</string>
+    <string name="IDText">Student ID Number</string>
+    <string name="PINNum">WatCard PIN</string>
+    <string name="UW">University of Waterloo</string>
+    <string name="loginedit">Edit Login Information</string>
+    <string name="recentTranText">Recent Transactions</string>
+    <string name="pastTranText">Past Transactions</string>
+    <string name="pastTranMonthText">Data collected over the month</string>
+
+</resources>
