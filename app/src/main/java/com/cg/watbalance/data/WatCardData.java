@@ -4,16 +4,14 @@ import android.graphics.Color;
 import android.text.format.DateUtils;
 
 import org.apache.commons.lang3.text.WordUtils;
+import org.joda.time.DateTime;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,7 +27,7 @@ import lecho.lib.hellocharts.model.SliceValue;
 public class WatCardData implements Serializable {
     private String FirstName;
     private Float MP, FD, Other, Total;
-    private Date Date;
+    private DateTime Date;
     private ArrayList<Transaction> myTransHistory;
 
     public void getBalanceData(Document myDoc) {
@@ -47,7 +45,7 @@ public class WatCardData implements Serializable {
             FD = numberFormat.parse(myTDTags.get(42).text()).floatValue() + numberFormat.parse(myTDTags.get(35).text()).floatValue() + numberFormat.parse(myTDTags.get(28).text()).floatValue();
             Other = numberFormat.parse(myTDTags.get(56).text()).floatValue() + numberFormat.parse(myTDTags.get(63).text()).floatValue() + numberFormat.parse(myTDTags.get(70).text()).floatValue() + numberFormat.parse(myTDTags.get(77).text()).floatValue() + numberFormat.parse(myTDTags.get(84).text()).floatValue();
             Total = numberFormat.parse(myTDTags.get(91).text().substring(2)).floatValue();
-            Date = new Date();
+            Date = DateTime.now();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,20 +82,16 @@ public class WatCardData implements Serializable {
         List<PointValue> myPointList = new ArrayList<>();
 
         Transaction firstTrans = myTransHistory.get(0);
-        Date lastDate = firstTrans.getDate();
-        Calendar lastCal = Calendar.getInstance();
-        lastCal.setTime(lastDate);
-        PointValue myPoint = new PointValue(lastCal.get(Calendar.DAY_OF_MONTH), -firstTrans.getAmount());
+        DateTime lastDate = firstTrans.getDate();
+        PointValue myPoint = new PointValue(lastDate.getDayOfMonth(), -firstTrans.getAmount());
 
         for (int i = 1; i < myTransHistory.size(); i++) {
             Transaction currentTrans = myTransHistory.get(i);
-            Boolean sameDay = new SimpleDateFormat("yyyyMMdd").format(lastDate).equals(new SimpleDateFormat("yyyyMMdd").format(currentTrans.getDate()));
-            if (!sameDay) {
+            if (!lastDate.withTimeAtStartOfDay().isEqual(currentTrans.getDate().withTimeAtStartOfDay())) {
                 myPoint.setLabel(NumberFormat.getCurrencyInstance(Locale.CANADA).format(myPoint.getY()));
                 myPointList.add(myPoint);
                 lastDate = currentTrans.getDate();
-                lastCal.setTime(lastDate);
-                myPoint = new PointValue(lastCal.get(Calendar.DAY_OF_MONTH), -currentTrans.getAmount());
+                myPoint = new PointValue(lastDate.getDayOfMonth(), -currentTrans.getAmount());
             } else {
                 myPoint.set(myPoint.getX(), myPoint.getY() + -currentTrans.getAmount());
             }
@@ -193,15 +187,11 @@ public class WatCardData implements Serializable {
     }
 
     public String getDateString() {
-        String txt = DateUtils.getRelativeTimeSpanString(Date.getTime()).toString();
+        String txt = DateUtils.getRelativeTimeSpanString(Date.getMillis()).toString();
         if (txt.equals("0 minutes ago")) {
             return "Now";
         } else {
             return txt;
         }
-    }
-
-    public Transaction getTransaction(int index) {
-        return myTransHistory.get(index);
     }
 }

@@ -114,6 +114,7 @@ public class mainScreen extends AppCompatActivity {
 
         //Initialize Alarm Notification
         NotificationServiceInitialize();
+
     }
 
     public void NotificationServiceInitialize() {
