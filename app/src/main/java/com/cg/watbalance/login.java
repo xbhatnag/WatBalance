@@ -2,6 +2,7 @@ package com.cg.watbalance;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -30,6 +32,7 @@ public class login extends AppCompatActivity {
     Connection myConn;
     ConnectionDetails myConnDet;
     Button mySaveButton;
+    TextView forgotPIN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,7 @@ public class login extends AppCompatActivity {
         IDNum = (EditText) findViewById(R.id.IDNum);
         pinNum = (EditText) findViewById(R.id.pinNum);
         mySaveButton = (Button) findViewById(R.id.button);
+        forgotPIN = (TextView) findViewById(R.id.forgotPIN);
 
         mySaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +51,16 @@ public class login extends AppCompatActivity {
                 myConnDet = new ConnectionDetails(IDNum.getText().toString(), pinNum.getText().toString());
                 myConn = new Connection(myConnDet);
                 myConn.getData();
+            }
+        });
+
+        forgotPIN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String resetURL = "https://account.watcard.uwaterloo.ca/pinreset.asp";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(resetURL));
+                startActivity(i);
             }
         });
     }
