@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -82,6 +83,7 @@ public class mainScreen extends AppCompatActivity {
             myCardView.updateNameView(myData);
             myCardView.updateBalanceView(myData);
             myCardView.updateTransView(myData);
+            myCardView.updateDailyBalanceView(myData);
         }
 
         // Refresh Button Action
@@ -114,7 +116,6 @@ public class mainScreen extends AppCompatActivity {
 
         //Initialize Alarm Notification
         NotificationServiceInitialize();
-
     }
 
     public void NotificationServiceInitialize() {
@@ -128,7 +129,7 @@ public class mainScreen extends AppCompatActivity {
     }
 
     public class WatCardView {
-        private TextView name, idText, total, mp, fd, other, date;
+        private TextView name, idText, total, mp, fd, other, date, dailyBalance, todaySpent, dailyLeft;
         private PieChartView pieChart;
         private ListView tranListView;
         private LineChartView transChart;
@@ -142,6 +143,10 @@ public class mainScreen extends AppCompatActivity {
             fd = (TextView) findViewById(R.id.flexDollarsData);
             other = (TextView) findViewById(R.id.otherData);
             date = (TextView) findViewById(R.id.date);
+
+            dailyBalance = (TextView) findViewById(R.id.dayBalance);
+            todaySpent = (TextView) findViewById(R.id.todaySpent);
+            dailyLeft = (TextView) findViewById(R.id.dailyLeft);
 
             pieChart = (PieChartView) findViewById(R.id.pieChart);
             transChart = (LineChartView) findViewById(R.id.transChart);
@@ -166,6 +171,14 @@ public class mainScreen extends AppCompatActivity {
 
                 pieChart.setInteractive(false);
                 pieChart.setPieChartData(myData.makePieChartData());
+            }
+        }
+
+        public void updateDailyBalanceView(WatCardData myData) {
+            if (myData != null) {
+                dailyBalance.setText(myData.getDailyBalanceString());
+                todaySpent.setText(myData.getTodaySpentString());
+                dailyLeft.setText(myData.getDailyLeftString());
             }
         }
 
@@ -202,6 +215,7 @@ public class mainScreen extends AppCompatActivity {
         }
 
         public void getData() {
+            Log.d("CONNECTION", "ESTABLISH");
             // Request a string response from the provided URL.
             mySnackBar = Snackbar.make(findViewById(R.id.FullWindow), "Refreshing...", Snackbar.LENGTH_INDEFINITE);
             mySnackBar.show();
@@ -222,6 +236,9 @@ public class mainScreen extends AppCompatActivity {
                                 myCardView.updateBalanceView(myData);
 
                                 if (myData.complete()) {
+                                    myData.setDailyBalance();
+                                    myCardView.updateDailyBalanceView(myData);
+
                                     FileManager myFM = new FileManager(getApplicationContext());
                                     myFM.openFileOutput("lastData");
                                     myFM.writeData(myData);
@@ -262,6 +279,9 @@ public class mainScreen extends AppCompatActivity {
                                 mySnackBar.dismiss();
 
                                 if (myData.complete()) {
+                                    myData.setDailyBalance();
+                                    myCardView.updateDailyBalanceView(myData);
+
                                     FileManager myFM = new FileManager(getApplicationContext());
                                     myFM.openFileOutput("lastData");
                                     myFM.writeData(myData);

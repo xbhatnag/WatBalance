@@ -91,7 +91,8 @@ public class login extends AppCompatActivity {
                                 myData.getBalanceData(Jsoup.parse(response));
 
                                 if (myData.complete()) {
-                                    Log.d("Context", getApplicationContext().getFilesDir().toString());
+                                    myData.setDailyBalance();
+
                                     FileManager myFM = new FileManager(getApplicationContext());
                                     myFM.openFileOutput("lastData");
                                     myFM.writeData(myData);
@@ -127,6 +128,8 @@ public class login extends AppCompatActivity {
                                 editor.apply();
 
                                 if (myData.complete()) {
+                                    myData.setDailyBalance();
+
                                     Log.d("Context", getApplicationContext().getFilesDir().toString());
                                     FileManager myFM = new FileManager(getApplicationContext());
                                     myFM.openFileOutput("lastData");

@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -26,11 +27,13 @@ import lecho.lib.hellocharts.model.SliceValue;
 
 public class WatCardData implements Serializable {
     private String FirstName;
-    private Float MP, FD, Other, Total;
+    private Float MP, FD, Other, Total, dailyBalance, todaySpent;
+    private int daysToTermEnd;
     private DateTime Date;
     private ArrayList<Transaction> myTransHistory;
 
     public void getBalanceData(Document myDoc) {
+
         Elements myTDTags = myDoc.getElementsByTag("TD");
         Element myNameTag = myDoc.getElementById("oneweb_account_name");
         String TempFirstName = myNameTag.text().split(",")[1];
@@ -99,6 +102,20 @@ public class WatCardData implements Serializable {
         myPoint.setLabel(NumberFormat.getCurrencyInstance(Locale.CANADA).format(myPoint.getY()));
         myPointList.add(myPoint);
         return myPointList;
+    }
+
+    public void setDailyBalance() {
+        Float totalAmt = Float.parseFloat("0");
+        for (int i = 0; i < myTransHistory.size(); i++) {
+            if (myTransHistory.get(i).getDate().withTimeAtStartOfDay().equals(DateTime.now().withTimeAtStartOfDay())) {
+                totalAmt += myTransHistory.get(i).getAmount();
+            }
+        }
+        DateTime endOfTerm = new DateTime(2016, 4, 23, 0, 0);
+        DateTime today = DateTime.now().withTime(0, 0, 0, 0);
+        daysToTermEnd = Days.daysBetween(today, endOfTerm).getDays();
+        todaySpent = totalAmt;
+        dailyBalance = (Total - todaySpent) / daysToTermEnd;
     }
 
     public PieChartData makePieChartData() {
@@ -182,6 +199,14 @@ public class WatCardData implements Serializable {
         return NumberFormat.getCurrencyInstance(Locale.CANADA).format(Total);
     }
 
+    public String getDailyBalanceString() {
+        return NumberFormat.getCurrencyInstance(Locale.CANADA).format(dailyBalance);
+    }
+
+    public String getTodaySpentString() {
+        return NumberFormat.getCurrencyInstance(Locale.CANADA).format(todaySpent);
+    }
+
     public String getFirstName() {
         return FirstName + "'s WatCard";
     }
@@ -193,5 +218,9 @@ public class WatCardData implements Serializable {
         } else {
             return txt;
         }
+    }
+
+    public String getDailyLeftString() {
+        return NumberFormat.getCurrencyInstance(Locale.CANADA).format(dailyBalance + todaySpent);
     }
 }

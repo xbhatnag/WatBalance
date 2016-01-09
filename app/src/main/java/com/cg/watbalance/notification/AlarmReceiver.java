@@ -59,7 +59,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            if (!response.contains("The Account or PIN code is incorrect!")) {
+                            if (!response.contains("The Account or PIN code is incorrect!") && response.contains("Financial Status Report")) {
                                 myData.getBalanceData(Jsoup.parse(response));
                                 NotificationManager notificationManager = (NotificationManager) myContext.getSystemService(Context
                                         .NOTIFICATION_SERVICE);
@@ -76,6 +76,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                                 notificationManager.notify(1, notificationBuilder.build());
 
                                 if (myData.complete()) {
+                                    myData.setDailyBalance();
+
                                     FileManager myFM = new FileManager(myContext);
                                     myFM.openFileOutput("lastData");
                                     myFM.writeData(myData);
@@ -95,10 +97,12 @@ public class AlarmReceiver extends BroadcastReceiver {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            if (!response.contains("The Account or PIN code is incorrect!")) {
+                            if (!response.contains("The Account or PIN code is incorrect!") && response.contains("Financial History Report")) {
                                 myData.setTransHistory(Jsoup.parse(response));
 
                                 if (myData.complete()) {
+                                    myData.setDailyBalance();
+
                                     FileManager myFM = new FileManager(myContext);
                                     myFM.openFileOutput("lastData");
                                     myFM.writeData(myData);

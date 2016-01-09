@@ -22,5 +22,6 @@ public class TransactionListActivity extends AppCompatActivity {
 
         ListView tranListView = (ListView) findViewById(R.id.tranListView);
         tranListView.setAdapter(new TransactionListAdapter(getApplicationContext(), myData.getTransHistory()));
+
     }
 }
