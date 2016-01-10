@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.cg.watbalance"
-        minSdkVersion 19
+        minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
         versionName "4.0"
