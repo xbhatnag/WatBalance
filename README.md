@@ -20,5 +20,5 @@
 
 
 ### Download
-<a href="http://1drv.ms/1J19FzS">Link to APK</a>
+<a href="https://play.google.com/store/apps/details?id=com.cg.watbalance">Play Store Link</a>
 
