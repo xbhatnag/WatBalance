@@ -1,6 +1,9 @@
 # WatBalance
 ### Supplies WatCard Information for students at the University of Waterloo.
 
+### Download
+<a href="https://play.google.com/store/apps/details?id=com.cg.watbalance">Play Store Link</a>
+
 ### Features
 * Checks WatCard Balance by querying UWaterloo Servers with Student ID Number and WatCard PIN.
 * Daily Notifications. Receive updates of your balance total.
@@ -17,8 +20,4 @@
 <img src="https://cloud.githubusercontent.com/assets/14666061/12218563/f3644bc8-b6f0-11e5-97fc-0be45c92dd68.png" height=500>
 <img src="https://cloud.githubusercontent.com/assets/14666061/12218565/ff403c72-b6f0-11e5-8a5a-eda35882bb65.png" height=500>
 <img src="https://cloud.githubusercontent.com/assets/14666061/12218568/0ca526de-b6f1-11e5-87c3-8c23c80b8e8b.png" height=500>
-
-
-### Download
-<a href="https://play.google.com/store/apps/details?id=com.cg.watbalance">Play Store Link</a>
 
