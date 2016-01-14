@@ -88,7 +88,7 @@ public class login extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             if (!response.contains("The Account or PIN code is incorrect!")) {
-                                myData.getBalanceData(Jsoup.parse(response));
+                                myData.setBalanceData(Jsoup.parse(response));
 
                                 if (myData.complete()) {
                                     myData.setDailyBalance();

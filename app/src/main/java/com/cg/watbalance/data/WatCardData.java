@@ -2,10 +2,15 @@ package com.cg.watbalance.data;
 
 import android.graphics.Color;
 import android.text.format.DateUtils;
+import android.util.Log;
+
+import com.cg.watbalance.transaction.Transaction;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -31,8 +36,25 @@ public class WatCardData implements Serializable {
     private int daysToTermEnd;
     private DateTime Date;
     private ArrayList<Transaction> myTransHistory;
+    private ArrayList<Outlet> myOutletList;
 
-    public void getBalanceData(Document myDoc) {
+    public void setOutletData(String response){
+        myOutletList = new ArrayList<>();
+        try {
+            JSONArray tempOutlets = new JSONObject(response).getJSONObject("data").getJSONArray("outlets");
+            for (int i=0;i<tempOutlets.length();i++){
+                myOutletList.add(new Outlet(tempOutlets.getJSONObject(i)));
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Outlet> getOutletData(){
+        return myOutletList;
+    }
+
+    public void setBalanceData(Document myDoc) {
 
         Elements myTDTags = myDoc.getElementsByTag("TD");
         Element myNameTag = myDoc.getElementById("oneweb_account_name");

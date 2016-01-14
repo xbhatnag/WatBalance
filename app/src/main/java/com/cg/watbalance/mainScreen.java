@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cg.watbalance.data.ConnectionDetails;
+import com.cg.watbalance.data.Outlet;
 import com.cg.watbalance.data.WatCardData;
 import com.cg.watbalance.notification.NotificationAlarm;
 import com.cg.watbalance.preferences.FileManager;
@@ -29,6 +30,9 @@ import com.cg.watbalance.transaction.TransactionListActivity;
 import com.cg.watbalance.transaction.TransactionListAdapter;
 
 import org.jsoup.Jsoup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import lecho.lib.hellocharts.view.LineChartView;
 import lecho.lib.hellocharts.view.PieChartView;
@@ -84,6 +88,7 @@ public class mainScreen extends AppCompatActivity {
             myCardView.updateBalanceView(myData);
             myCardView.updateTransView(myData);
             myCardView.updateDailyBalanceView(myData);
+            myCardView.updateTodayMenuView(myData);
         }
 
         // Refresh Button Action
@@ -130,6 +135,8 @@ public class mainScreen extends AppCompatActivity {
 
     public class WatCardView {
         private TextView name, idText, total, mp, fd, other, date, dailyBalance, todaySpent, dailyLeft;
+        private TextView location1, lunch1, lunch2, lunch3, dinner1, dinner2, dinner3;
+        private TextView location2, lunch4, lunch5, lunch6, dinner4, dinner5, dinner6;
         private PieChartView pieChart;
         private ListView tranListView;
         private LineChartView transChart;
@@ -152,6 +159,22 @@ public class mainScreen extends AppCompatActivity {
             transChart = (LineChartView) findViewById(R.id.transChart);
 
             tranListView = (ListView) findViewById(R.id.listView);
+
+            location1 = (TextView) findViewById(R.id.location1);
+            lunch1 = (TextView) findViewById(R.id.lunch1);
+            lunch2 = (TextView) findViewById(R.id.lunch2);
+            lunch3 = (TextView) findViewById(R.id.lunch3);
+            dinner1 = (TextView) findViewById(R.id.dinner1);
+            dinner2 = (TextView) findViewById(R.id.dinner2);
+            dinner3 = (TextView) findViewById(R.id.dinner3);
+
+            location2 = (TextView) findViewById(R.id.location2);
+            lunch4 = (TextView) findViewById(R.id.lunch4);
+            lunch5 = (TextView) findViewById(R.id.lunch5);
+            lunch6 = (TextView) findViewById(R.id.lunch6);
+            dinner4 = (TextView) findViewById(R.id.dinner4);
+            dinner5 = (TextView) findViewById(R.id.dinner5);
+            dinner6 = (TextView) findViewById(R.id.dinner6);
         }
 
         public void updateNameView(WatCardData myData) {
@@ -182,6 +205,24 @@ public class mainScreen extends AppCompatActivity {
             }
         }
 
+        public void updateTodayMenuView(WatCardData myData){
+            location1.setText("Today at " + myData.getOutletData().get(0).getName());
+            lunch1.setText(myData.getOutletData().get(0).getLunch().getFoodList().get(0).getName());
+            lunch2.setText(myData.getOutletData().get(0).getLunch().getFoodList().get(1).getName());
+            lunch3.setText(myData.getOutletData().get(0).getLunch().getFoodList().get(2).getName());
+            dinner1.setText(myData.getOutletData().get(0).getDinner().getFoodList().get(0).getName());
+            dinner2.setText(myData.getOutletData().get(0).getDinner().getFoodList().get(1).getName());
+            dinner3.setText(myData.getOutletData().get(0).getDinner().getFoodList().get(2).getName());
+
+            location2.setText("Today at " + myData.getOutletData().get(1).getName());
+            lunch4.setText(myData.getOutletData().get(1).getLunch().getFoodList().get(0).getName());
+            lunch5.setText(myData.getOutletData().get(1).getLunch().getFoodList().get(1).getName());
+            lunch6.setText(myData.getOutletData().get(1).getLunch().getFoodList().get(2).getName());
+            dinner4.setText(myData.getOutletData().get(1).getDinner().getFoodList().get(0).getName());
+            dinner5.setText(myData.getOutletData().get(1).getDinner().getFoodList().get(1).getName());
+            dinner6.setText(myData.getOutletData().get(1).getDinner().getFoodList().get(2).getName());
+        }
+
         public void updateTransView(WatCardData myData) {
             if (myData != null) {
                 tranListView.setAdapter(new TransactionListAdapter(getApplicationContext(), myData.getTransHistory()));
@@ -207,11 +248,13 @@ public class mainScreen extends AppCompatActivity {
         ConnectionDetails myConnDetails;
         RequestQueue queue;
         WatCardData myData;
+        List<Outlet> myOutlets;
 
         public Connection(ConnectionDetails newConnDetails) {
             myConnDetails = newConnDetails;
             queue = Volley.newRequestQueue(getApplicationContext());
             myData = new WatCardData();
+            myOutlets = new ArrayList<>();
         }
 
         public void getData() {
@@ -223,6 +266,7 @@ public class mainScreen extends AppCompatActivity {
             // Add the request to the RequestQueue.
             queue.add(createBalanceRequest());
             queue.add(createTransHistoryRequest());
+            queue.add(createFoodRequest());
         }
 
         public StringRequest createBalanceRequest() {
@@ -231,19 +275,11 @@ public class mainScreen extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             if (!response.contains("The Account or PIN code is incorrect!")) {
-                                myData.getBalanceData(Jsoup.parse(response));
+                                myData.setBalanceData(Jsoup.parse(response));
                                 myCardView.updateNameView(myData);
                                 myCardView.updateBalanceView(myData);
 
-                                if (myData.complete()) {
-                                    myData.setDailyBalance();
-                                    myCardView.updateDailyBalanceView(myData);
-
-                                    FileManager myFM = new FileManager(getApplicationContext());
-                                    myFM.openFileOutput("lastData");
-                                    myFM.writeData(myData);
-                                    myFM.closeFileOutput();
-                                }
+                                saveOnComplete();
                             } else {
                                 mySnackBar.dismiss();
                                 mySnackBar = Snackbar.make(findViewById(R.id.FullWindow), "Incorrect Login Information", Snackbar.LENGTH_INDEFINITE)
@@ -276,17 +312,7 @@ public class mainScreen extends AppCompatActivity {
                             if (!response.contains("The Account or PIN code is incorrect!")) {
                                 myData.setTransHistory(Jsoup.parse(response));
                                 myCardView.updateTransView(myData);
-                                mySnackBar.dismiss();
-
-                                if (myData.complete()) {
-                                    myData.setDailyBalance();
-                                    myCardView.updateDailyBalanceView(myData);
-
-                                    FileManager myFM = new FileManager(getApplicationContext());
-                                    myFM.openFileOutput("lastData");
-                                    myFM.writeData(myData);
-                                    myFM.closeFileOutput();
-                                }
+                                saveOnComplete();
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -294,6 +320,35 @@ public class mainScreen extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                 }
             });
+        }
+
+        public StringRequest createFoodRequest() {
+            return new StringRequest(Request.Method.GET, myConnDetails.getFoodURL(),
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            myData.setOutletData(response);
+                            myCardView.updateTodayMenuView(myData);
+                            saveOnComplete();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+        }
+
+        public void saveOnComplete(){
+            if (myData.complete()) {
+                mySnackBar.dismiss();
+                myData.setDailyBalance();
+                myCardView.updateDailyBalanceView(myData);
+
+                FileManager myFM = new FileManager(getApplicationContext());
+                myFM.openFileOutput("lastData");
+                myFM.writeData(myData);
+                myFM.closeFileOutput();
+            }
         }
     }
 }

@@ -52,6 +52,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         public void getData() {
             queue.add(createBalanceRequest());
             queue.add(createTransHistoryRequest());
+            queue.add(createFoodRequest());
         }
 
         public StringRequest createBalanceRequest() {
@@ -60,29 +61,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                         @Override
                         public void onResponse(String response) {
                             if (!response.contains("The Account or PIN code is incorrect!") && response.contains("Financial Status Report")) {
-                                myData.getBalanceData(Jsoup.parse(response));
-                                NotificationManager notificationManager = (NotificationManager) myContext.getSystemService(Context
-                                        .NOTIFICATION_SERVICE);
-
-                                PendingIntent openApp = PendingIntent.getActivity(myContext, 0, new Intent(myContext, mainScreen.class), 0);
-
-                                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(myContext.getApplicationContext())
-                                        .setSmallIcon(R.drawable.ic_local_atm_24dp)
-                                        .setContentTitle("WatBalance")
-                                        .setContentText("You have " + myData.getTotalString() + " in your WatCard")
-                                        .setContentIntent(openApp)
-                                        .setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
-
-                                notificationManager.notify(1, notificationBuilder.build());
-
-                                if (myData.complete()) {
-                                    myData.setDailyBalance();
-
-                                    FileManager myFM = new FileManager(myContext);
-                                    myFM.openFileOutput("lastData");
-                                    myFM.writeData(myData);
-                                    myFM.closeFileOutput();
-                                }
+                                myData.setBalanceData(Jsoup.parse(response));
+                                saveOnComplete();
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -99,15 +79,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                         public void onResponse(String response) {
                             if (!response.contains("The Account or PIN code is incorrect!") && response.contains("Financial History Report")) {
                                 myData.setTransHistory(Jsoup.parse(response));
-
-                                if (myData.complete()) {
-                                    myData.setDailyBalance();
-
-                                    FileManager myFM = new FileManager(myContext);
-                                    myFM.openFileOutput("lastData");
-                                    myFM.writeData(myData);
-                                    myFM.closeFileOutput();
-                                }
+                                saveOnComplete();
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -117,6 +89,45 @@ public class AlarmReceiver extends BroadcastReceiver {
             });
         }
 
+        public StringRequest createFoodRequest() {
+            return new StringRequest(Request.Method.GET, myConnDetails.getFoodURL(),
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            myData.setOutletData(response);
+                            saveOnComplete();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+        }
+
+        public void saveOnComplete(){
+            if (myData.complete()) {
+                myData.setDailyBalance();
+
+                NotificationManager notificationManager = (NotificationManager) myContext.getSystemService(Context
+                        .NOTIFICATION_SERVICE);
+
+                PendingIntent openApp = PendingIntent.getActivity(myContext, 0, new Intent(myContext, mainScreen.class), 0);
+
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(myContext.getApplicationContext())
+                        .setSmallIcon(R.drawable.ic_local_atm_24dp)
+                        .setContentTitle("WatBalance")
+                        .setContentText("You have " + myData.getTotalString() + " in your WatCard")
+                        .setContentIntent(openApp)
+                        .setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
+
+                notificationManager.notify(1, notificationBuilder.build());
+
+                FileManager myFM = new FileManager(myContext);
+                myFM.openFileOutput("lastData");
+                myFM.writeData(myData);
+                myFM.closeFileOutput();
+            }
+        }
     }
 
 

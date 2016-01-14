@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.cg.watbalance.R;
-import com.cg.watbalance.data.Transaction;
 
 import java.util.ArrayList;
 
