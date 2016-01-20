@@ -2,7 +2,6 @@ package com.cg.watbalance.data;
 
 import android.graphics.Color;
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import com.cg.watbalance.transaction.Transaction;
 
@@ -33,25 +32,24 @@ import lecho.lib.hellocharts.model.SliceValue;
 public class WatCardData implements Serializable {
     private String FirstName;
     private Float MP, FD, Other, Total, dailyBalance, todaySpent;
-    private int daysToTermEnd;
     private DateTime Date;
     private ArrayList<Transaction> myTransHistory;
     private ArrayList<Outlet> myOutletList;
 
-    public void setOutletData(String response){
+    public ArrayList<Outlet> getOutletData() {
+        return myOutletList;
+    }
+
+    public void setOutletData(String response) {
         myOutletList = new ArrayList<>();
         try {
             JSONArray tempOutlets = new JSONObject(response).getJSONObject("data").getJSONArray("outlets");
-            for (int i=0;i<tempOutlets.length();i++){
+            for (int i = 0; i < tempOutlets.length(); i++) {
                 myOutletList.add(new Outlet(tempOutlets.getJSONObject(i)));
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public ArrayList<Outlet> getOutletData(){
-        return myOutletList;
     }
 
     public void setBalanceData(Document myDoc) {
@@ -100,7 +98,7 @@ public class WatCardData implements Serializable {
     }
 
     public boolean complete() {
-        return (FirstName != null) && (!FirstName.equals("")) && (MP != null) && (FD != null) && (Other != null) && (Total != null) && (Date != null) && (myTransHistory != null);
+        return (FirstName != null) && (!FirstName.equals("")) && (MP != null) && (FD != null) && (Other != null) && (Total != null) && (Date != null) && (myTransHistory != null) && (myOutletList != null);
     }
 
     public List<PointValue> makeDayPointValues() {
@@ -135,7 +133,7 @@ public class WatCardData implements Serializable {
         }
         DateTime endOfTerm = new DateTime(2016, 4, 23, 0, 0);
         DateTime today = DateTime.now().withTime(0, 0, 0, 0);
-        daysToTermEnd = Days.daysBetween(today, endOfTerm).getDays();
+        int daysToTermEnd = Days.daysBetween(today, endOfTerm).getDays();
         todaySpent = totalAmt;
         dailyBalance = (Total - todaySpent) / daysToTermEnd;
     }

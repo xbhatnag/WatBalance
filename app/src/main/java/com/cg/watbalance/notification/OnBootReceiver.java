@@ -13,8 +13,6 @@ public class OnBootReceiver extends BroadcastReceiver {
             SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             if (myPreferences.getBoolean("dailyNotification", true)) {
                 NotificationAlarm myNotifAlarm = new NotificationAlarm(context);
-                String[] stringTime = myPreferences.getString("notificationTime", "07:00").split(":");
-                myNotifAlarm.setTime(Integer.parseInt(stringTime[0]), Integer.parseInt(stringTime[1]));
                 myNotifAlarm.startRepeatingAlarm();
             }
         }

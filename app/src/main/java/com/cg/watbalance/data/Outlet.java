@@ -13,55 +13,9 @@ import java.util.List;
 
 public class Outlet implements Serializable{
 
-    public class Meal implements Serializable{
-        public class Food implements Serializable{
-            String Name;
-            int ID;
-
-            public Food(JSONObject myFood) {
-                try {
-                    Name = myFood.getString("product_name");
-                    ID = myFood.getInt("product_id");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            public String getName() {
-                if(Name.substring(0,4).equals("R - ")){
-                    return Name.substring(4);
-                }
-                return Name;
-            }
-
-            public int getID() {
-                return ID;
-            }
-        }
-
-        List<Food> myFoodList;
-
-        public Meal(JSONArray myMeal) {
-            myFoodList = new ArrayList<>();
-            try {
-                for (int i = 0; i < myMeal.length(); i++) {
-                    myFoodList.add(new Food(myMeal.getJSONObject(i)));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        public List<Food> getFoodList() {
-            return myFoodList;
-        }
-
-    }
-
     String name;
     int ID;
     Meal lunch, dinner;
-
     public Outlet(JSONObject myOutlet) {
         try {
             name = myOutlet.getString("outlet_name");
@@ -88,5 +42,51 @@ public class Outlet implements Serializable{
 
     public Meal getDinner() {
         return dinner;
+    }
+
+    public class Meal implements Serializable {
+        List<Food> myFoodList;
+
+        public Meal(JSONArray myMeal) {
+            myFoodList = new ArrayList<>();
+            try {
+                for (int i = 0; i < myMeal.length(); i++) {
+                    myFoodList.add(new Food(myMeal.getJSONObject(i)));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        public List<Food> getFoodList() {
+            return myFoodList;
+        }
+
+        public class Food implements Serializable {
+            String Name;
+            int ID;
+
+            public Food(JSONObject myFood) {
+                ID = -1;
+                try {
+                    Name = myFood.getString("product_name");
+                    ID = myFood.getInt("product_id");
+                } catch (Exception e) {
+                    Log.d("FOOD", "Product ID/Name is null");
+                }
+            }
+
+            public String getName() {
+                if (Name.substring(0, 4).equals("R - ")) {
+                    return Name.substring(4);
+                }
+                return Name;
+            }
+
+            public int getID() {
+                return ID;
+            }
+        }
+
     }
 }

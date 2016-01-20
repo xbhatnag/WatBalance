@@ -42,17 +42,20 @@ public class TransactionListAdapter extends BaseAdapter {
         Holder holder = new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.transaction_list_item, null);
+
         holder.Title = (TextView) rowView.findViewById(R.id.tranTitle);
-        holder.Date = (TextView) rowView.findViewById(R.id.tranDate);
+        holder.Type = (TextView) rowView.findViewById(R.id.tranType);
+        holder.Time = (TextView) rowView.findViewById(R.id.tranTime);
         holder.Amount = (TextView) rowView.findViewById(R.id.tranAmt);
 
         holder.Title.setText(transList.get(position).getPlace());
-        holder.Date.setText(transList.get(position).getDateString());
+        holder.Type.setText(transList.get(position).getType());
+        holder.Time.setText(transList.get(position).getTimeString());
         holder.Amount.setText(transList.get(position).getAmountString());
         return rowView;
     }
 
     public class Holder {
-        TextView Title, Date, Amount;
+        TextView Title, Type, Time, Amount;
     }
 }

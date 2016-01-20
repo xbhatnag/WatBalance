@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cg.watbalance.data.ConnectionDetails;
+import com.cg.watbalance.data.Encryption;
 import com.cg.watbalance.data.WatCardData;
 import com.cg.watbalance.preferences.FileManager;
 
@@ -33,11 +33,14 @@ public class login extends AppCompatActivity {
     ConnectionDetails myConnDet;
     Button mySaveButton;
     TextView forgotPIN;
+    Encryption myEncryption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        myEncryption = new Encryption(getApplicationContext());
 
         //Variable Declaration
         IDNum = (EditText) findViewById(R.id.IDNum);
@@ -80,6 +83,7 @@ public class login extends AppCompatActivity {
             // Add the request to the RequestQueue.
             queue.add(createBalanceRequest());
             queue.add(createTransHistoryRequest());
+            queue.add(createFoodRequest());
         }
 
         public StringRequest createBalanceRequest() {
@@ -89,18 +93,7 @@ public class login extends AppCompatActivity {
                         public void onResponse(String response) {
                             if (!response.contains("The Account or PIN code is incorrect!")) {
                                 myData.setBalanceData(Jsoup.parse(response));
-
-                                if (myData.complete()) {
-                                    myData.setDailyBalance();
-
-                                    FileManager myFM = new FileManager(getApplicationContext());
-                                    myFM.openFileOutput("lastData");
-                                    myFM.writeData(myData);
-                                    myFM.closeFileOutput();
-
-                                    Intent myIntent = new Intent(login.this, mainScreen.class);
-                                    startActivity(myIntent);
-                                }
+                                saveOnComplete();
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -120,25 +113,7 @@ public class login extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Incorrect Login Information", Toast.LENGTH_LONG).show();
                             } else {
                                 myData.setTransHistory(Jsoup.parse(response));
-
-                                SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
-                                editor.putString("IDNum", IDNum.getText().toString());
-                                editor.putString("pinNum", pinNum.getText().toString());
-                                editor.apply();
-
-                                if (myData.complete()) {
-                                    myData.setDailyBalance();
-
-                                    Log.d("Context", getApplicationContext().getFilesDir().toString());
-                                    FileManager myFM = new FileManager(getApplicationContext());
-                                    myFM.openFileOutput("lastData");
-                                    myFM.writeData(myData);
-                                    myFM.closeFileOutput();
-
-                                    Intent myIntent = new Intent(login.this, mainScreen.class);
-                                    startActivity(myIntent);
-                                }
+                                saveOnComplete();
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -148,6 +123,46 @@ public class login extends AppCompatActivity {
                 }
             });
         }
+
+        public StringRequest createFoodRequest() {
+            return new StringRequest(Request.Method.GET, myConnDetails.getFoodURL(),
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            myData.setOutletData(response);
+                            saveOnComplete();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+        }
+
+        public void saveOnComplete() {
+            if (myData.complete()) {
+                myData.setDailyBalance();
+
+                SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                String encryptedPIN = myEncryption.encryptPIN(pinNum.getText().toString());
+
+                editor.putString("IDNum", IDNum.getText().toString());
+                editor.putString("pinNum", encryptedPIN);
+                editor.apply();
+
+                FileManager myFM = new FileManager(getApplicationContext());
+                myFM.openFileOutput("lastData");
+                myFM.writeData(myData);
+                myFM.closeFileOutput();
+
+                Intent myIntent = new Intent(login.this, mainScreen.class);
+                startActivity(myIntent);
+            }
+        }
+
+
     }
 
 

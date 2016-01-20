@@ -10,7 +10,8 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class Transaction implements Serializable {
-    private String terminal;
+    private String rawString;
+    private String type;
     private DateTime date;
     private Float amount;
 
@@ -24,18 +25,23 @@ public class Transaction implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        terminal = myElement.getElementById("oneweb_financial_history_td_terminal").text();
+        rawString = myElement.getElementById("oneweb_financial_history_td_terminal").text();
+        if (rawString.contains("WAT-FS")) {
+            type = "Meal Plan";
+        } else {
+            type = "Flex Dollars";
+        }
     }
 
     public String getPlace() {
-        return terminal.substring(7);
+        return rawString.substring(7);
     }
 
     public String getAmountString() {
         return NumberFormat.getCurrencyInstance(Locale.CANADA).format(amount);
     }
 
-    public String getDateString() {
+    public String getTimeString() {
         DateTimeFormatter myFormat = DateTimeFormat.forPattern("dd MMM 'at' h:mm aa");
         return myFormat.print(date);
     }
@@ -46,5 +52,9 @@ public class Transaction implements Serializable {
 
     public DateTime getDate() {
         return date;
+    }
+
+    public String getType() {
+        return type;
     }
 }

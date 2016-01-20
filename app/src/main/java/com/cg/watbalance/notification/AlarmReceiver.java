@@ -18,6 +18,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cg.watbalance.R;
 import com.cg.watbalance.data.ConnectionDetails;
+import com.cg.watbalance.data.Encryption;
 import com.cg.watbalance.data.WatCardData;
 import com.cg.watbalance.mainScreen;
 import com.cg.watbalance.preferences.FileManager;
@@ -29,8 +30,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d("SERVICE", "TRIGGERED");
+        Encryption myEncryption = new Encryption(context);
         SharedPreferences myLoginPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        ConnectionDetails myConnDet = new ConnectionDetails(myLoginPref.getString("IDNum", "00000000"), myLoginPref.getString("pinNum", "0000"));
+        ConnectionDetails myConnDet = new ConnectionDetails(myLoginPref.getString("IDNum", "00000000"), myEncryption.decryptPIN(myLoginPref.getString("pinNum", "0000")));
         Connection myConn = new Connection(myConnDet, context);
         myConn.getData();
     }
@@ -104,23 +106,24 @@ public class AlarmReceiver extends BroadcastReceiver {
             });
         }
 
-        public void saveOnComplete(){
+        public void saveOnComplete() {
             if (myData.complete()) {
                 myData.setDailyBalance();
 
-                NotificationManager notificationManager = (NotificationManager) myContext.getSystemService(Context
-                        .NOTIFICATION_SERVICE);
+                SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(myContext.getApplicationContext());
 
-                PendingIntent openApp = PendingIntent.getActivity(myContext, 0, new Intent(myContext, mainScreen.class), 0);
-
-                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(myContext.getApplicationContext())
-                        .setSmallIcon(R.drawable.ic_local_atm_24dp)
-                        .setContentTitle("WatBalance")
-                        .setContentText("You have " + myData.getTotalString() + " in your WatCard")
-                        .setContentIntent(openApp)
-                        .setVisibility(NotificationCompat.VISIBILITY_PRIVATE);
-
-                notificationManager.notify(1, notificationBuilder.build());
+                if (myPreferences.getBoolean("dailyNotification", true)) {
+                    NotificationManager notificationManager = (NotificationManager) myContext.getSystemService(Context
+                            .NOTIFICATION_SERVICE);
+                    PendingIntent openApp = PendingIntent.getActivity(myContext, 0, new Intent(myContext, mainScreen.class), 0);
+                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(myContext.getApplicationContext())
+                            .setSmallIcon(R.drawable.ic_local_atm_24dp)
+                            .setContentTitle("WatBalance")
+                            .setContentText("You have " + myData.getTotalString() + " in your WatCard")
+                            .setContentIntent(openApp)
+                            .setVisibility(NotificationCompat.VISIBILITY_SECRET);
+                    notificationManager.notify(1, notificationBuilder.build());
+                }
 
                 FileManager myFM = new FileManager(myContext);
                 myFM.openFileOutput("lastData");

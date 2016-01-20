@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cg.watbalance.data.ConnectionDetails;
+import com.cg.watbalance.data.Encryption;
 import com.cg.watbalance.data.Outlet;
 import com.cg.watbalance.data.WatCardData;
 import com.cg.watbalance.notification.NotificationAlarm;
@@ -34,6 +35,7 @@ import org.jsoup.Jsoup;
 import java.util.ArrayList;
 import java.util.List;
 
+import lecho.lib.hellocharts.model.SelectedValue;
 import lecho.lib.hellocharts.view.LineChartView;
 import lecho.lib.hellocharts.view.PieChartView;
 
@@ -49,6 +51,7 @@ public class mainScreen extends AppCompatActivity {
     NotificationAlarm myNotifAlarm;
     TextView openFullTranList;
     SharedPreferences.OnSharedPreferenceChangeListener onPrefChange;
+    Encryption myEncryption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,22 +60,7 @@ public class mainScreen extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Variable Declaration
-        myCardView = new WatCardView();
         myPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        myConnDet = new ConnectionDetails(myPreferences.getString("IDNum", "00000000"), myPreferences.getString("pinNum", "0000"));
-        myConn = new Connection(myConnDet);
-        myFAB = (FloatingActionButton) findViewById(R.id.fab);
-        mySettingsIcon = (ImageView) findViewById(R.id.settingsIcon);
-        openFullTranList = (TextView) findViewById(R.id.openFullTranList);
-        myNotifAlarm = new NotificationAlarm(getApplicationContext());
-        onPrefChange = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                myConn.getData();
-                NotificationServiceInitialize();
-            }
-        };
 
         // Check New User
         if (myPreferences.getString("IDNum", "00000000").equals("00000000")) {
@@ -80,6 +68,22 @@ public class mainScreen extends AppCompatActivity {
             startActivity(myIntent);
         } else {
             // Reads Last Data Written to File
+            myEncryption = new Encryption(getApplicationContext());
+            myConnDet = new ConnectionDetails(myPreferences.getString("IDNum", "00000000"), myEncryption.decryptPIN(myPreferences.getString("pinNum", "0000")));
+            myConn = new Connection(myConnDet);
+
+            myCardView = new WatCardView();
+            myFAB = (FloatingActionButton) findViewById(R.id.fab);
+            mySettingsIcon = (ImageView) findViewById(R.id.settingsIcon);
+            openFullTranList = (TextView) findViewById(R.id.openFullTranList);
+            myNotifAlarm = new NotificationAlarm(getApplicationContext());
+            onPrefChange = new SharedPreferences.OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                    myConn.getData();
+                }
+            };
+
             FileManager myFM = new FileManager(getApplicationContext());
             myFM.openFileInput("lastData");
             WatCardData myData = myFM.readData();
@@ -88,48 +92,41 @@ public class mainScreen extends AppCompatActivity {
             myCardView.updateBalanceView(myData);
             myCardView.updateTransView(myData);
             myCardView.updateDailyBalanceView(myData);
+            Log.d("REACHED", "HERE");
             myCardView.updateTodayMenuView(myData);
-        }
 
-        // Refresh Button Action
-        myFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myConn.getData();
-            }
-        });
+            // Refresh Button Action
+            myFAB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    myConn.getData();
+                }
+            });
 
-        // Edit Card Action
-        mySettingsIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
-                startActivity(myIntent);
-            }
-        });
+            // Edit Card Action
+            mySettingsIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent myIntent = new Intent(getApplicationContext(), Preferences.class);
+                    startActivity(myIntent);
+                }
+            });
 
-        openFullTranList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(getApplicationContext(), TransactionListActivity.class);
-                startActivity(myIntent);
-            }
-        });
+            openFullTranList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent myIntent = new Intent(getApplicationContext(), TransactionListActivity.class);
+                    startActivity(myIntent);
+                }
+            });
 
-        //Preference Change Refresh
-        myPreferences.registerOnSharedPreferenceChangeListener(onPrefChange);
+            //Preference Change Refresh
+            myPreferences.registerOnSharedPreferenceChangeListener(onPrefChange);
 
-        //Initialize Alarm Notification
-        NotificationServiceInitialize();
-    }
-
-    public void NotificationServiceInitialize() {
-        if (myPreferences.getBoolean("dailyNotification", true)) {
-            String[] stringTime = myPreferences.getString("notificationTime", "07:00").split(":");
-            myNotifAlarm.setTime(Integer.parseInt(stringTime[0]), Integer.parseInt(stringTime[1]));
+            //Initialize Alarm Notification
             myNotifAlarm.startRepeatingAlarm();
-        } else {
-            myNotifAlarm.cancelAlarm();
+
+            myConn.getData();
         }
     }
 
@@ -205,7 +202,7 @@ public class mainScreen extends AppCompatActivity {
             }
         }
 
-        public void updateTodayMenuView(WatCardData myData){
+        public void updateTodayMenuView(WatCardData myData) {
             location1.setText("Today at " + myData.getOutletData().get(0).getName());
             lunch1.setText(myData.getOutletData().get(0).getLunch().getFoodList().get(0).getName());
             lunch2.setText(myData.getOutletData().get(0).getLunch().getFoodList().get(1).getName());
@@ -235,13 +232,13 @@ public class mainScreen extends AppCompatActivity {
                 if (myData.getTransHistory().size() != 0) {
                     transChart.setLineChartData(myData.makeTransChartData());
                     transChart.setValueSelectionEnabled(true);
+                    transChart.selectValue(new SelectedValue(0, 0, SelectedValue.SelectedValueType.NONE));
                     transChart.setZoomEnabled(false);
                 } else {
                     transChart.setLineChartData(null);
                 }
             }
         }
-
     }
 
     public class Connection {
@@ -338,7 +335,7 @@ public class mainScreen extends AppCompatActivity {
             });
         }
 
-        public void saveOnComplete(){
+        public void saveOnComplete() {
             if (myData.complete()) {
                 mySnackBar.dismiss();
                 myData.setDailyBalance();
@@ -352,5 +349,3 @@ public class mainScreen extends AppCompatActivity {
         }
     }
 }
-
-

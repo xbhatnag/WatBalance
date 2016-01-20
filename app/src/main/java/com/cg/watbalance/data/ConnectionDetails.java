@@ -4,12 +4,12 @@ import org.joda.time.DateTime;
 
 public class ConnectionDetails {
     final String uWaterlooURL = "https://account.watcard.uwaterloo.ca/cgi-bin/OneWeb.exe?";
-    private String myIDNum = null;
-    private String myPinNum = null;
-    private String myBalanceURL;
     final String APIURL = "https://api.uwaterloo.ca/v2/";
     final String APIKey = "?key=907f2381ac84737b6bfe0e41d159fbee";
     final String FoodURL = APIURL + "foodservices/menu.json" + APIKey;
+    private String myIDNum = null;
+    private String myPinNum = null;
+    private String myBalanceURL;
 
     public ConnectionDetails(String newIDNum, String newPinNum) {
         myIDNum = newIDNum;
@@ -30,7 +30,7 @@ public class ConnectionDetails {
         return uWaterlooURL + "acnt_1=" + myIDNum + "&acnt_2=" + myPinNum + "&DBDATE=" + month + "%2F1%2F" + year + "&DEDATE=" + month + "%2F" + lastDayOfMonth + "%2F" + year + "&PASS=PASS&STATUS=HIST";
     }
 
-    public String getFoodURL(){
+    public String getFoodURL() {
         return FoodURL;
     }
 

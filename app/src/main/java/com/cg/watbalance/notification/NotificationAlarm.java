@@ -23,22 +23,10 @@ public class NotificationAlarm {
         alarmPendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
     }
 
-    public void setTime(int hour, int minute) {
-        calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-    }
-
     public void startRepeatingAlarm() {
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmPendingIntent);
+        calendar = Calendar.getInstance();
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_HOUR, alarmPendingIntent);
         Log.d("SERVICE", "STARTED");
-    }
-
-    public void cancelAlarm() {
-        PendingIntent cancelIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmMgr.cancel(cancelIntent);
-        Log.d("SERVICE", "STOPPED");
     }
 }
