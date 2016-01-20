@@ -63,7 +63,7 @@ public class mainScreen extends AppCompatActivity {
         myPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
         // Check New User
-        if (myPreferences.getString("IDNum", "00000000").equals("00000000")) {
+        if (myPreferences.getString("pinNum", "0000").length() <= 6) {
             Intent myIntent = new Intent(getApplicationContext(), login.class);
             startActivity(myIntent);
         } else {
@@ -273,9 +273,6 @@ public class mainScreen extends AppCompatActivity {
                         public void onResponse(String response) {
                             if (!response.contains("The Account or PIN code is incorrect!")) {
                                 myData.setBalanceData(Jsoup.parse(response));
-                                myCardView.updateNameView(myData);
-                                myCardView.updateBalanceView(myData);
-
                                 saveOnComplete();
                             } else {
                                 mySnackBar.dismiss();
@@ -308,7 +305,6 @@ public class mainScreen extends AppCompatActivity {
                         public void onResponse(String response) {
                             if (!response.contains("The Account or PIN code is incorrect!")) {
                                 myData.setTransHistory(Jsoup.parse(response));
-                                myCardView.updateTransView(myData);
                                 saveOnComplete();
                             }
                         }
@@ -325,7 +321,6 @@ public class mainScreen extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             myData.setOutletData(response);
-                            myCardView.updateTodayMenuView(myData);
                             saveOnComplete();
                         }
                     }, new Response.ErrorListener() {
@@ -335,9 +330,29 @@ public class mainScreen extends AppCompatActivity {
             });
         }
 
+        public StringRequest createBuildingRequest() {
+            return new StringRequest(Request.Method.GET, myConnDetails.getBuildingURL(),
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+        }
+
         public void saveOnComplete() {
             if (myData.complete()) {
                 mySnackBar.dismiss();
+
+                myCardView.updateNameView(myData);
+                myCardView.updateBalanceView(myData);
+                myCardView.updateTransView(myData);
+                myCardView.updateTodayMenuView(myData);
+
                 myData.setDailyBalance();
                 myCardView.updateDailyBalanceView(myData);
 

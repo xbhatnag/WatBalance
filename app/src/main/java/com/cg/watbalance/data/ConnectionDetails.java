@@ -7,6 +7,7 @@ public class ConnectionDetails {
     final String APIURL = "https://api.uwaterloo.ca/v2/";
     final String APIKey = "?key=907f2381ac84737b6bfe0e41d159fbee";
     final String FoodURL = APIURL + "foodservices/menu.json" + APIKey;
+    final String BuildingURL = APIURL + "/buildings/list.json" + APIKey;
     private String myIDNum = null;
     private String myPinNum = null;
     private String myBalanceURL;
@@ -36,5 +37,9 @@ public class ConnectionDetails {
 
     public String getIDString() {
         return "ID# " + myIDNum;
+    }
+
+    public String getBuildingURL() {
+        return BuildingURL;
     }
 }
