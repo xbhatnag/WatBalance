@@ -18,7 +18,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cg.watbalance.R;
 import com.cg.watbalance.data.ConnectionDetails;
-import com.cg.watbalance.data.EncryptionTest;
+import com.cg.watbalance.data.Encryption;
 import com.cg.watbalance.data.WatCardData;
 import com.cg.watbalance.mainScreen;
 import com.cg.watbalance.preferences.FileManager;
@@ -30,9 +30,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d("SERVICE", "TRIGGERED");
-        EncryptionTest myEncryptionTest = new EncryptionTest(context);
+        Encryption myEncryption = new Encryption(context);
         SharedPreferences myLoginPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        ConnectionDetails myConnDet = new ConnectionDetails(myLoginPref.getString("IDNum", "00000000"), myEncryptionTest.decryptPIN(myLoginPref.getString("pinNum", "0000")));
+        ConnectionDetails myConnDet = new ConnectionDetails(myLoginPref.getString("IDNum", "00000000"), myEncryption.decryptPIN(myLoginPref.getString("pinNum", "0000")));
         Connection myConn = new Connection(myConnDet, context);
         myConn.getData();
     }

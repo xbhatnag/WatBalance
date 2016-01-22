@@ -19,7 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cg.watbalance.data.ConnectionDetails;
-import com.cg.watbalance.data.EncryptionTest;
+import com.cg.watbalance.data.Encryption;
 import com.cg.watbalance.data.WatCardData;
 import com.cg.watbalance.preferences.FileManager;
 
@@ -33,14 +33,14 @@ public class login extends AppCompatActivity {
     ConnectionDetails myConnDet;
     Button mySaveButton;
     TextView forgotPIN;
-    EncryptionTest myEncryptionTest;
+    Encryption myEncryption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        myEncryptionTest = new EncryptionTest(getApplicationContext());
+        myEncryption = new Encryption(getApplicationContext());
 
         //Variable Declaration
         IDNum = (EditText) findViewById(R.id.IDNum);
@@ -146,7 +146,7 @@ public class login extends AppCompatActivity {
                 SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 SharedPreferences.Editor editor = sharedpreferences.edit();
 
-                String encryptedPIN = myEncryptionTest.encryptPIN(pinNum.getText().toString());
+                String encryptedPIN = myEncryption.encryptPIN(pinNum.getText().toString());
 
                 editor.putString("IDNum", IDNum.getText().toString());
                 editor.putString("pinNum", encryptedPIN);
