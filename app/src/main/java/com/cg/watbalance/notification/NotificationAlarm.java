@@ -26,7 +26,7 @@ public class NotificationAlarm {
     public void startRepeatingAlarm() {
         calendar = Calendar.getInstance();
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_HOUR, alarmPendingIntent);
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmPendingIntent);
         Log.d("SERVICE", "STARTED");
     }
 }

@@ -21,7 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cg.watbalance.data.ConnectionDetails;
-import com.cg.watbalance.data.Encryption;
+import com.cg.watbalance.data.EncryptionTest;
 import com.cg.watbalance.data.Outlet;
 import com.cg.watbalance.data.WatCardData;
 import com.cg.watbalance.notification.NotificationAlarm;
@@ -51,7 +51,7 @@ public class mainScreen extends AppCompatActivity {
     NotificationAlarm myNotifAlarm;
     TextView openFullTranList;
     SharedPreferences.OnSharedPreferenceChangeListener onPrefChange;
-    Encryption myEncryption;
+    EncryptionTest myEncryptionTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +66,11 @@ public class mainScreen extends AppCompatActivity {
         if (myPreferences.getString("pinNum", "0000").length() <= 6) {
             Intent myIntent = new Intent(getApplicationContext(), login.class);
             startActivity(myIntent);
+            finish();
         } else {
             // Reads Last Data Written to File
-            myEncryption = new Encryption(getApplicationContext());
-            myConnDet = new ConnectionDetails(myPreferences.getString("IDNum", "00000000"), myEncryption.decryptPIN(myPreferences.getString("pinNum", "0000")));
+            myEncryptionTest = new EncryptionTest(getApplicationContext());
+            myConnDet = new ConnectionDetails(myPreferences.getString("IDNum", "00000000"), myEncryptionTest.decryptPIN(myPreferences.getString("pinNum", "0000")));
             myConn = new Connection(myConnDet);
 
             myCardView = new WatCardView();
@@ -128,6 +129,12 @@ public class mainScreen extends AppCompatActivity {
 
             myConn.getData();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        myConn.getData();
     }
 
     public class WatCardView {
