@@ -19,10 +19,10 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.security.auth.x500.X500Principal;
 
-public class encryptiontest {
+public class Encryption {
     KeyStore myKeyStore;
 
-    public encryptiontest(Context context) {
+    public Encryption(Context context) {
         try {
             myKeyStore = KeyStore.getInstance("AndroidKeyStore");
         } catch (Exception e) {
