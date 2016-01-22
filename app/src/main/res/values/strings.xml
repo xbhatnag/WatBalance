@@ -1,20 +1,40 @@
 <resources>
+    <string name="UW">University of Waterloo</string>
     <string name="app_name">WatBalance</string>
+    <string name="WatCard">WatCard</string>
+
+    <string name="IDText">Student ID Number</string>
+    <string name="PINNum">WatCard PIN</string>
+
+
     <string name="MP">Meal Plan</string>
     <string name="FD">Flex Dollars</string>
     <string name="Other">Other</string>
-    <string name="WatCard">WatCard</string>
+
     <string name="Date">Date</string>
     <string name="IDNum">ID# 000000</string>
     <string name="DefaultAmt">$0.0</string>
-    <string name="button_login">Login</string>
+
+    <string name="dailyBal">Daily Balance</string>
+    <string name="spentToday">Spent Today</string>
+    <string name="amountLeft">Amount Left</string>
+
+    <string name="todayAt">Today at %s</string>
+    <string name="location">Location</string>
+    <string name="lunch">Lunch</string>
+    <string name="dinner">Dinner</string>
+
     <string name="title_activity_login">Login Information</string>
-    <string name="IDText">Student ID Number</string>
-    <string name="PINNum">WatCard PIN</string>
-    <string name="UW">University of Waterloo</string>
-    <string name="loginedit">Edit Login Information</string>
-    <string name="recentTranText">Recent Transactions</string>
-    <string name="pastTranText">Past Transactions</string>
-    <string name="pastTranMonthText">Data collected over the month</string>
+
+    <string name="button_login">Login</string>
+    <string name="sync">Sync</string>
+    <string name="settings">Settings</string>
+    <string name="loginEdit">Edit Login Information</string>
+
+    <string name="recentTran">Recent Transactions</string>
+    <string name="seeFullList">See Full List</string>
+
+    <string name="pastTran">Past Transactions</string>
+    <string name="pastTranFull">Data collected over the month</string>
 
 </resources>

@@ -10,10 +10,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/ColorTheme">
         <activity
             android:name=".login"
-            android:label="@string/title_activity_login">
+            android:label="@string/title_activity_login"
+            android:theme="@style/ColorTheme.LoginWindow">
             <intent-filter>
                 <action android:name="com.cg.watbalance.login" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -24,10 +25,9 @@
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/ColorTheme.MainWindow">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -45,7 +45,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".transaction.TransactionListActivity" />
+        <activity
+            android:name=".transaction.TransactionListActivity"
+            android:label="Transactions" />
         <activity android:name=".preferences.Preferences" />
     </application>
 

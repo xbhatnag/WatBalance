@@ -8,7 +8,7 @@
     android:scrollbars="none"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".mainScreen"
-    tools:showIn="@layout/activity_balancescreen">
+    tools:showIn="@layout/activity_main_screen">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#3F51B5"
+                android:background="@color/colorMaterialIndigo"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -56,7 +56,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_toEndOf="@id/Name"
                         android:clickable="true"
-                        android:contentDescription="Settings"
+                        android:contentDescription="@string/settings"
                         android:src="@drawable/ic_settings_24dp" />
                 </RelativeLayout>
 
@@ -88,6 +88,7 @@
                         android:id="@+id/syncIcon"
                         android:layout_width="20sp"
                         android:layout_height="20sp"
+                        android:contentDescription="@string/sync"
                         android:src="@drawable/ic_sync_24dp" />
 
                     <TextView
@@ -120,7 +121,7 @@
                     android:id="@+id/Total"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#8BC34A"
+                    android:background="@color/colorMaterialGreen"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingBottom="12dp"
@@ -128,7 +129,7 @@
                     android:paddingStart="16dp"
                     android:paddingTop="16dp"
                     android:text="@string/DefaultAmt"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/colorWhite"
                     android:textSize="40sp" />
 
                 <LinearLayout
@@ -169,7 +170,7 @@
                             android:paddingStart="8dp"
                             android:text="@string/DefaultAmt"
                             android:textAlignment="viewEnd"
-                            android:textColor="#8BC34A"
+                            android:textColor="@color/colorMaterialGreen"
                             android:textSize="20sp" />
                     </LinearLayout>
 
@@ -203,7 +204,7 @@
                             android:paddingStart="8dp"
                             android:text="@string/DefaultAmt"
                             android:textAlignment="viewEnd"
-                            android:textColor="#8BC34A"
+                            android:textColor="@color/colorMaterialGreen"
                             android:textSize="20sp" />
                     </LinearLayout>
 
@@ -237,7 +238,7 @@
                             android:paddingStart="8dp"
                             android:text="@string/DefaultAmt"
                             android:textAlignment="viewEnd"
-                            android:textColor="#8BC34A"
+                            android:textColor="@color/colorMaterialGreen"
                             android:textSize="20sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -260,7 +261,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#2196F3"
+                    android:background="@color/colorMaterialBlue"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:orientation="vertical">
@@ -273,7 +274,7 @@
                         android:paddingEnd="16dp"
                         android:paddingStart="16dp"
                         android:paddingTop="16dp"
-                        android:text="Daily Balance"
+                        android:text="@string/dailyBal"
                         android:textColor="#FFFFFF"
                         android:textSize="24sp" />
 
@@ -295,7 +296,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#F44336"
+                    android:background="@color/colorMaterialRed"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:orientation="vertical">
@@ -308,7 +309,7 @@
                         android:paddingEnd="16dp"
                         android:paddingStart="16dp"
                         android:paddingTop="16dp"
-                        android:text="Spent Today"
+                        android:text="@string/spentToday"
                         android:textColor="#FFFFFF"
                         android:textSize="24sp" />
 
@@ -330,7 +331,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#8BC34A"
+                    android:background="@color/colorMaterialGreen"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:orientation="vertical">
@@ -343,7 +344,7 @@
                         android:paddingEnd="16dp"
                         android:paddingStart="16dp"
                         android:paddingTop="16dp"
-                        android:text="Amount Available"
+                        android:text="@string/amountLeft"
                         android:textColor="#FFFFFF"
                         android:textSize="24sp" />
 
@@ -381,28 +382,28 @@
                     android:id="@+id/location1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#795548"
+                    android:background="@color/colorMaterialBrown"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingBottom="12dp"
                     android:paddingEnd="16dp"
                     android:paddingStart="16dp"
                     android:paddingTop="16dp"
-                    android:text="Location 1"
+                    android:text="@string/location"
                     android:textColor="#FFFFFF"
                     android:textSize="24sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#795548"
+                    android:background="@color/colorMaterialBrown"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingBottom="8dp"
                     android:paddingEnd="8dp"
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
-                    android:text="Lunch"
+                    android:text="@string/lunch"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
 
@@ -413,7 +414,7 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Lunch 1"
+                    android:text="@string/lunch"
                     android:textSize="18sp" />
 
                 <TextView
@@ -423,7 +424,7 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Lunch 2"
+                    android:text="@string/lunch"
                     android:textSize="18sp" />
 
                 <TextView
@@ -433,20 +434,20 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Lunch 3"
+                    android:text="@string/lunch"
                     android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#795548"
+                    android:background="@color/colorMaterialBrown"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingBottom="8dp"
                     android:paddingEnd="8dp"
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
-                    android:text="Dinner"
+                    android:text="@string/dinner"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
 
@@ -457,7 +458,7 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Dinner 1"
+                    android:text="@string/dinner"
                     android:textSize="18sp" />
 
                 <TextView
@@ -467,7 +468,7 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Dinner 2"
+                    android:text="@string/dinner"
                     android:textSize="18sp" />
 
                 <TextView
@@ -477,7 +478,7 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Dinner 3"
+                    android:text="@string/dinner"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -499,28 +500,28 @@
                     android:id="@+id/location2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#795548"
+                    android:background="@color/colorMaterialBrown"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingBottom="12dp"
                     android:paddingEnd="16dp"
                     android:paddingStart="16dp"
                     android:paddingTop="16dp"
-                    android:text="Location 2"
+                    android:text="@string/location"
                     android:textColor="#FFFFFF"
                     android:textSize="24sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#795548"
+                    android:background="@color/colorMaterialBrown"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingBottom="8dp"
                     android:paddingEnd="8dp"
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
-                    android:text="Lunch"
+                    android:text="@string/lunch"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
 
@@ -531,7 +532,7 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Lunch 4"
+                    android:text="@string/lunch"
                     android:textSize="18sp" />
 
                 <TextView
@@ -541,7 +542,7 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Lunch 5"
+                    android:text="@string/lunch"
                     android:textSize="18sp" />
 
                 <TextView
@@ -551,20 +552,20 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Lunch 6"
+                    android:text="@string/lunch"
                     android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#795548"
+                    android:background="@color/colorMaterialBrown"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingBottom="8dp"
                     android:paddingEnd="8dp"
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
-                    android:text="Dinner"
+                    android:text="@string/dinner"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
 
@@ -575,7 +576,7 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Dinner 4"
+                    android:text="@string/dinner"
                     android:textSize="18sp" />
 
                 <TextView
@@ -585,7 +586,7 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Dinner 5"
+                    android:text="@string/dinner"
                     android:textSize="18sp" />
 
                 <TextView
@@ -595,7 +596,7 @@
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Dinner 6"
+                    android:text="@string/dinner"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -632,7 +633,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="#F44336"
+                        android:background="@color/colorMaterialRed"
                         android:gravity="center_vertical"
                         android:padding="16dp"
                         android:text="@string/MP"
@@ -643,7 +644,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="#9C27B0"
+                        android:background="@color/colorMaterialPurple"
                         android:gravity="center_vertical"
                         android:padding="16dp"
                         android:text="@string/FD"
@@ -654,7 +655,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:background="#FFC107"
+                        android:background="@color/colorMaterialAmber"
                         android:gravity="center_vertical"
                         android:padding="16dp"
                         android:text="@string/Other"
@@ -680,14 +681,14 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#3F51B5"
+                    android:background="@color/colorMaterialIndigo"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingBottom="12dp"
                     android:paddingEnd="16dp"
                     android:paddingStart="16dp"
                     android:paddingTop="16dp"
-                    android:text="@string/recentTranText"
+                    android:text="@string/recentTran"
                     android:textColor="#FFFFFF"
                     android:textSize="24sp" />
 
@@ -707,7 +708,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    android:text="See Full List" />
+                    android:text="@string/seeFullList" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -730,6 +731,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/colorMaterialIndigo"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:orientation="vertical">
@@ -737,23 +739,21 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#3F51B5"
                         android:paddingBottom="8dp"
                         android:paddingEnd="16dp"
                         android:paddingStart="16dp"
                         android:paddingTop="16dp"
-                        android:text="@string/pastTranText"
+                        android:text="@string/pastTran"
                         android:textColor="#FFFFFF"
                         android:textSize="24sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#3F51B5"
                         android:paddingBottom="16dp"
                         android:paddingEnd="16dp"
                         android:paddingStart="16dp"
-                        android:text="@string/pastTranMonthText"
+                        android:text="@string/pastTranFull"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
                 </LinearLayout>
