@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -66,6 +67,7 @@ public class mainScreen extends AppCompatActivity {
             startActivity(myIntent);
             finish();
         } else {
+            //Define Variables
             myEncryption = new Encryption(getApplicationContext());
             myConnDet = new ConnectionDetails(myPreferences.getString("IDNum", "00000000"), myEncryption.decryptPIN(myPreferences.getString("pinNum", "0000")));
             myConn = new Connection(myConnDet);
@@ -85,18 +87,16 @@ public class mainScreen extends AppCompatActivity {
             myCardView.updateDailyBalanceView(myData);
             myCardView.updateTodayMenuView(myData);
 
-
             //Initialize Alarm Notification
             myNotifAlarm.startRepeatingAlarm();
-
-            //Get New Data
-            myConn.getData();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        //Get New Data
         myConn.getData();
     }
 
@@ -110,6 +110,7 @@ public class mainScreen extends AppCompatActivity {
         private FloatingActionButton myFAB;
         private ImageView mySettingsIcon;
         private TextView openFullTranList;
+        private CardView menu1, menu2;
 
         public WatCardView() {
             myFAB = (FloatingActionButton) findViewById(R.id.fab);
@@ -176,6 +177,9 @@ public class mainScreen extends AppCompatActivity {
             dinner4 = (TextView) findViewById(R.id.dinner4);
             dinner5 = (TextView) findViewById(R.id.dinner5);
             dinner6 = (TextView) findViewById(R.id.dinner6);
+
+            menu1 = (CardView) findViewById(R.id.menu1);
+            menu2 = (CardView) findViewById(R.id.menu2);
         }
 
         public void updateNameView(WatCardData myData) {
@@ -203,23 +207,29 @@ public class mainScreen extends AppCompatActivity {
         public void updateTodayMenuView(WatCardData myData) {
             Resources res = getResources();
 
-            //Location 1
-            location1.setText(String.format(res.getString(R.string.todayAt), myData.getOutletData().get(0).getName()));
-            lunch1.setText(myData.getOutletData().get(0).getLunch().getFoodList().get(0).getName());
-            lunch2.setText(myData.getOutletData().get(0).getLunch().getFoodList().get(1).getName());
-            lunch3.setText(myData.getOutletData().get(0).getLunch().getFoodList().get(2).getName());
-            dinner1.setText(myData.getOutletData().get(0).getDinner().getFoodList().get(0).getName());
-            dinner2.setText(myData.getOutletData().get(0).getDinner().getFoodList().get(1).getName());
-            dinner3.setText(myData.getOutletData().get(0).getDinner().getFoodList().get(2).getName());
+            if (myData.getOutletData().get(0).getLunch() == null) {
+                menu1.setVisibility(View.GONE);
+            } else {
+                location1.setText(String.format(res.getString(R.string.todayAt), myData.getOutletData().get(0).getName()));
+                lunch1.setText(myData.getOutletData().get(0).getLunch().getFoodList().get(0).getName());
+                lunch2.setText(myData.getOutletData().get(0).getLunch().getFoodList().get(1).getName());
+                lunch3.setText(myData.getOutletData().get(0).getLunch().getFoodList().get(2).getName());
+                dinner1.setText(myData.getOutletData().get(0).getDinner().getFoodList().get(0).getName());
+                dinner2.setText(myData.getOutletData().get(0).getDinner().getFoodList().get(1).getName());
+                dinner3.setText(myData.getOutletData().get(0).getDinner().getFoodList().get(2).getName());
+            }
 
-            //Location 2
-            location2.setText(String.format(res.getString(R.string.todayAt), myData.getOutletData().get(1).getName()));
-            lunch4.setText(myData.getOutletData().get(1).getLunch().getFoodList().get(0).getName());
-            lunch5.setText(myData.getOutletData().get(1).getLunch().getFoodList().get(1).getName());
-            lunch6.setText(myData.getOutletData().get(1).getLunch().getFoodList().get(2).getName());
-            dinner4.setText(myData.getOutletData().get(1).getDinner().getFoodList().get(0).getName());
-            dinner5.setText(myData.getOutletData().get(1).getDinner().getFoodList().get(1).getName());
-            dinner6.setText(myData.getOutletData().get(1).getDinner().getFoodList().get(2).getName());
+            if (myData.getOutletData().get(1).getLunch() == null) {
+                menu2.setVisibility(View.GONE);
+            } else {
+                location2.setText(String.format(res.getString(R.string.todayAt), myData.getOutletData().get(1).getName()));
+                lunch4.setText(myData.getOutletData().get(1).getLunch().getFoodList().get(0).getName());
+                lunch5.setText(myData.getOutletData().get(1).getLunch().getFoodList().get(1).getName());
+                lunch6.setText(myData.getOutletData().get(1).getLunch().getFoodList().get(2).getName());
+                dinner4.setText(myData.getOutletData().get(1).getDinner().getFoodList().get(0).getName());
+                dinner5.setText(myData.getOutletData().get(1).getDinner().getFoodList().get(1).getName());
+                dinner6.setText(myData.getOutletData().get(1).getDinner().getFoodList().get(2).getName());
+            }
         }
 
         public void updateTransView(WatCardData myData) {
