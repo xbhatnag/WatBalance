@@ -24,7 +24,7 @@
     <string name="lunch">Lunch</string>
     <string name="dinner">Dinner</string>
 
-    <string name="title_activity_login">Login Information</string>
+    <string name="title_activity_login">WatBalance</string>
 
     <string name="button_login">Login</string>
     <string name="sync">Sync</string>
@@ -36,5 +36,14 @@
 
     <string name="pastTran">Past Transactions</string>
     <string name="pastTranFull">Data collected over the month</string>
+
+    <string name="title_activity_balance_screen">Balance</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_transaction_screen">Transactions</string>
+    <string name="title_activity_outlet_screen">Outlets</string>
 
 </resources>

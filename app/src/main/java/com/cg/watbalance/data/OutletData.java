@@ -11,12 +11,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Outlet implements Serializable{
+public class OutletData implements Serializable {
 
     String name;
     int ID;
     Meal lunch, dinner;
-    public Outlet(JSONObject myOutlet) {
+
+    public OutletData(JSONObject myOutlet) {
         try {
             name = myOutlet.getString("outlet_name");
             ID = myOutlet.getInt("outlet_id");

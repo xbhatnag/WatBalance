@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="WatBalance">
+        <menu>
+            <item
+                android:id="@+id/nav_balance"
+                android:icon="@drawable/ic_menu_credit_card"
+                android:title="Balance" />
+            <item
+                android:id="@+id/nav_transactions"
+                android:icon="@drawable/ic_menu_time"
+                android:title="Transactions" />
+            <item
+                android:id="@+id/nav_outlets"
+                android:icon="@drawable/ic_menu_food"
+                android:title="Outlets" />
+        </menu>
+    </item>
+    <item android:title="Manage">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_settings"
+                android:title="Settings" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_menu_about"
+                android:title="About" />
+        </menu>
+    </item>
+
+</menu>

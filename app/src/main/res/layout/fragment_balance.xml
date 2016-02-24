@@ -1,0 +1,429 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cg.watbalance.balance">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:scrollbars="none"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/menu1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    card_view:cardCornerRadius="4dp"
+                    card_view:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/location1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorMaterialBrown"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="12dp"
+                            android:paddingEnd="16dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="16dp"
+                            android:text="@string/location"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorMaterialBrown"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/lunch"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/lunch1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/lunch"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/lunch2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/lunch"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/lunch3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/lunch"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorMaterialBrown"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/dinner"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/dinner1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/dinner"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/dinner2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/dinner"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/dinner3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/dinner"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/menu2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    card_view:cardCornerRadius="4dp"
+                    card_view:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/location2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorMaterialBrown"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="12dp"
+                            android:paddingEnd="16dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="16dp"
+                            android:text="@string/location"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorMaterialBrown"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/lunch"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/lunch4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/lunch"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/lunch5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/lunch"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/lunch6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/lunch"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorMaterialBrown"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:text="@string/dinner"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/dinner4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/dinner"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/dinner5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/dinner"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/dinner6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="16dp"
+                            android:text="@string/dinner"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    card_view:cardCornerRadius="4dp"
+                    card_view:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <lecho.lib.hellocharts.view.PieChartView
+                            android:id="@+id/pieChart"
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:padding="8dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorMaterialRed"
+                                android:gravity="center_vertical"
+                                android:padding="16dp"
+                                android:text="@string/MP"
+                                android:textColor="#FFFFFF"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorMaterialPurple"
+                                android:gravity="center_vertical"
+                                android:padding="16dp"
+                                android:text="@string/FD"
+                                android:textColor="#FFFFFF"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:background="@color/colorMaterialAmber"
+                                android:gravity="center_vertical"
+                                android:padding="16dp"
+                                android:text="@string/Other"
+                                android:textColor="#FFFFFF"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    card_view:cardCornerRadius="4dp"
+                    card_view:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorMaterialIndigo"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="12dp"
+                            android:paddingEnd="16dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="16dp"
+                            android:text="@string/recentTran"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                        <ListView
+                            android:id="@+id/listView"
+                            android:layout_width="fill_parent"
+                            android:layout_height="330dp" />
+
+                        <View
+                            android:id="@+id/transLine"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#E0E0E0" />
+
+                        <TextView
+                            android:id="@+id/openFullTranList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="@string/seeFullList" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    card_view:cardCornerRadius="4dp"
+                    card_view:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorMaterialIndigo"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="8dp"
+                                android:paddingEnd="16dp"
+                                android:paddingStart="16dp"
+                                android:paddingTop="16dp"
+                                android:text="@string/pastTran"
+                                android:textColor="#FFFFFF"
+                                android:textSize="24sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="16dp"
+                                android:paddingEnd="16dp"
+                                android:paddingStart="16dp"
+                                android:text="@string/pastTranFull"
+                                android:textColor="#FFFFFF"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+
+                        <lecho.lib.hellocharts.view.LineChartView
+                            android:id="@+id/transChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:layout_margin="16dp" />
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</FrameLayout>

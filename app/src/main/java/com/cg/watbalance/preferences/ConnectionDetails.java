@@ -1,4 +1,4 @@
-package com.cg.watbalance.data;
+package com.cg.watbalance.preferences;
 
 import org.joda.time.DateTime;
 
@@ -7,7 +7,8 @@ public class ConnectionDetails {
     final String APIURL = "https://api.uwaterloo.ca/v2/";
     final String APIKey = "?key=907f2381ac84737b6bfe0e41d159fbee";
     final String FoodURL = APIURL + "foodservices/menu.json" + APIKey;
-    final String BuildingURL = APIURL + "/buildings/list.json" + APIKey;
+    final String OutletURL = APIURL + "foodservices/locations.json" + APIKey;
+    final String BuildingURL = APIURL + "buildings/list.json" + APIKey;
     private String myIDNum = null;
     private String myPinNum = null;
     private String myBalanceURL;
@@ -35,8 +36,8 @@ public class ConnectionDetails {
         return FoodURL;
     }
 
-    public String getIDString() {
-        return "ID# " + myIDNum;
+    public String getOutletURL() {
+        return OutletURL;
     }
 
     public String getBuildingURL() {

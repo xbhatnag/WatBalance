@@ -3,8 +3,6 @@ package com.cg.watbalance.preferences;
 import android.content.Context;
 import android.util.Log;
 
-import com.cg.watbalance.data.WatCardData;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -26,7 +24,7 @@ public class FileManager {
         try {
             fos = new FileOutputStream(myContext.getFilesDir() + "/" + fileName);
             oos = new ObjectOutputStream(fos);
-            Log.d("FILEMANAGER", "OPEN WRITE : " + myContext.getFilesDir() + "/" + fileName);
+            Log.d("FILE", "WRITE : " + myContext.getFilesDir() + "/" + fileName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,26 +34,24 @@ public class FileManager {
         try {
             fis = new FileInputStream(myContext.getFilesDir() + "/" + fileName);
             ois = new ObjectInputStream(fis);
-            Log.d("FILEMANAGER", "OPEN READ : " + myContext.getFilesDir() + "/" + fileName);
+            Log.d("FILE", "READ : " + myContext.getFilesDir() + "/" + fileName);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void writeData(WatCardData myData) {
+    public void writeData(Object myData) {
         try {
             oos.writeObject(myData);
-            Log.d("FILEMANAGER", "WRITE : " + myData.getFirstName());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public WatCardData readData() {
-        WatCardData myData = null;
+    public Object readData() {
+        Object myData = null;
         try {
-            myData = (WatCardData) ois.readObject();
-            Log.d("FILEMANAGER", "READ : " + myData.getFirstName());
+            myData = ois.readObject();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,7 +62,6 @@ public class FileManager {
         try {
             oos.close();
             fos.close();
-            Log.d("FILEMANAGER", "CLOSE WRITE");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,7 +71,6 @@ public class FileManager {
         try {
             ois.close();
             fis.close();
-            Log.d("FILEMANAGER", "CLOSE READ");
         } catch (Exception e) {
             e.printStackTrace();
         }

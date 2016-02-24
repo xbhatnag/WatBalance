@@ -1,4 +1,4 @@
-package com.cg.watbalance.transaction;
+package com.cg.watbalance.data.transaction;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,11 +13,9 @@ import java.util.ArrayList;
 
 public class TransactionListAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
-    private ArrayList<Transaction> transList;
-    private Context context;
+    private ArrayList<TransactionData.Transaction> transList;
 
-    public TransactionListAdapter(Context newContext, ArrayList<Transaction> newTransList) {
-        context = newContext;
+    public TransactionListAdapter(Context context, ArrayList<TransactionData.Transaction> newTransList) {
         transList = newTransList;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

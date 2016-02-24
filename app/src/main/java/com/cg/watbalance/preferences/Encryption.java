@@ -1,4 +1,4 @@
-package com.cg.watbalance.data;
+package com.cg.watbalance.preferences;
 
 import android.content.Context;
 import android.security.KeyPairGeneratorSpec;

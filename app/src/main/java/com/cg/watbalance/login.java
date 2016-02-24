@@ -1,29 +1,31 @@
 package com.cg.watbalance;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.cg.watbalance.data.ConnectionDetails;
-import com.cg.watbalance.data.Encryption;
-import com.cg.watbalance.data.WatCardData;
-import com.cg.watbalance.preferences.FileManager;
+import com.cg.watbalance.preferences.Connection;
+import com.cg.watbalance.preferences.ConnectionDetails;
+import com.cg.watbalance.preferences.Encryption;
+import com.cg.watbalance.service.Service;
 
-import org.jsoup.Jsoup;
+import org.apache.commons.lang3.text.WordUtils;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+import java.util.Calendar;
 
 public class login extends AppCompatActivity {
 
@@ -34,6 +36,8 @@ public class login extends AppCompatActivity {
     Button mySaveButton;
     TextView forgotPIN;
     Encryption myEncryption;
+    SharedPreferences myPreferences;
+    SharedPreferences.Editor myPrefEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +51,67 @@ public class login extends AppCompatActivity {
         pinNum = (EditText) findViewById(R.id.pinNum);
         mySaveButton = (Button) findViewById(R.id.button);
         forgotPIN = (TextView) findViewById(R.id.forgotPIN);
+        myPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
+        if (myPreferences.getString("PinNum", "0000").length() > 6) {
+            startRepeat();
+
+            //Go to Launch Screen
+            Intent myIntent = new Intent(getApplicationContext(), balanceScreen.class);
+            startActivity(myIntent);
+            finish();
+        }
 
         mySaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myConnDet = new ConnectionDetails(IDNum.getText().toString(), pinNum.getText().toString());
-                myConn = new Connection(myConnDet);
+                myConn = new Connection(myConnDet, getApplicationContext()) {
+
+                    @Override
+                    public void onResponseReceive(Document myDoc) {
+                        Element myNameTag = myDoc.getElementById("oneweb_account_name");
+                        String TempFirstName = myNameTag.text().split(",")[1];
+                        String TempLastName = myNameTag.text().split(",")[0];
+                        String FirstName = WordUtils.capitalizeFully(TempFirstName.substring(0, TempFirstName.length() - 1));
+                        String LastName = WordUtils.capitalizeFully(TempLastName);
+                        myPrefEditor = myPreferences.edit();
+                        myPrefEditor.putString("Name", FirstName + " " + LastName);
+                        myPrefEditor.apply();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("LOGIN", "SUCCESS");
+                        String encryptedPIN = myEncryption.encryptPIN(pinNum.getText().toString());
+
+                        myPrefEditor = myPreferences.edit();
+                        myPrefEditor.putString("IDNum", IDNum.getText().toString());
+                        myPrefEditor.putString("PinNum", encryptedPIN);
+                        myPrefEditor.apply();
+
+                        startRepeat();
+
+                        Intent myIntent = new Intent(login.this, balanceScreen.class);
+                        startActivity(myIntent);
+                        finish();
+                    }
+
+                    @Override
+                    public void beforeConnect() {
+
+                    }
+
+                    @Override
+                    public void onConnectionError() {
+                        Toast.makeText(getApplicationContext(), "Connection Error", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onIncorrectLogin() {
+                        Toast.makeText(getApplicationContext(), "Incorrect Login Information", Toast.LENGTH_LONG).show();
+                    }
+                };
                 myConn.getData();
             }
         });
@@ -68,103 +127,11 @@ public class login extends AppCompatActivity {
         });
     }
 
-    public class Connection {
-        ConnectionDetails myConnDetails;
-        RequestQueue queue;
-        WatCardData myData;
-
-        public Connection(ConnectionDetails newConnDetails) {
-            myConnDetails = newConnDetails;
-            queue = Volley.newRequestQueue(getApplicationContext());
-            myData = new WatCardData();
-        }
-
-        public void getData() {
-            // Add the request to the RequestQueue.
-            queue.add(createBalanceRequest());
-            queue.add(createTransHistoryRequest());
-            queue.add(createFoodRequest());
-        }
-
-        public StringRequest createBalanceRequest() {
-            return new StringRequest(Request.Method.GET, myConnDetails.getBalanceURL(),
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            if (!response.contains("The Account or PIN code is incorrect!")) {
-                                myData.setBalanceData(Jsoup.parse(response));
-                                saveOnComplete();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            });
-        }
-
-
-        public StringRequest createTransHistoryRequest() {
-            return new StringRequest(Request.Method.GET, myConnDetails.getTransactionURL(),
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            if (response.contains("The Account or PIN code is incorrect!")) {
-                                Toast.makeText(getApplicationContext(), "Incorrect Login Information", Toast.LENGTH_LONG).show();
-                            } else {
-                                myData.setTransHistory(Jsoup.parse(response));
-                                saveOnComplete();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(), "Connection Error", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-
-        public StringRequest createFoodRequest() {
-            return new StringRequest(Request.Method.GET, myConnDetails.getFoodURL(),
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            myData.setOutletData(response);
-                            saveOnComplete();
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            });
-        }
-
-        public void saveOnComplete() {
-            if (myData.complete()) {
-                myData.setDailyBalance();
-
-                SharedPreferences sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-
-                String encryptedPIN = myEncryption.encryptPIN(pinNum.getText().toString());
-
-                editor.putString("IDNum", IDNum.getText().toString());
-                editor.putString("pinNum", encryptedPIN);
-                editor.apply();
-
-                FileManager myFM = new FileManager(getApplicationContext());
-                myFM.openFileOutput("lastData");
-                myFM.writeData(myData);
-                myFM.closeFileOutput();
-
-                Intent myIntent = new Intent(login.this, mainScreen.class);
-                startActivity(myIntent);
-                finish();
-            }
-        }
-
-
+    public void startRepeat() {
+        AlarmManager alarmMgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent newPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, Service.class), 0);
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(),
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES, newPendingIntent);
     }
-
 
 }

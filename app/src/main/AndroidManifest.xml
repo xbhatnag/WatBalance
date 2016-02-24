@@ -16,27 +16,17 @@
             android:label="@string/title_activity_login"
             android:theme="@style/ColorTheme.LoginWindow">
             <intent-filter>
-                <action android:name="com.cg.watbalance.login" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".mainScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/ColorTheme.MainWindow">
-            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <receiver
-            android:name=".notification.AlarmReceiver"
+            android:name=".service.Service"
             android:enabled="true" />
         <receiver
-            android:name=".notification.OnBootReceiver"
+            android:name=".service.OnBootReceiver"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
@@ -45,10 +35,19 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".transaction.TransactionListActivity"
-            android:label="Transactions" />
         <activity android:name=".preferences.Preferences" />
+        <activity
+            android:name=".balanceScreen"
+            android:label="@string/title_activity_balance_screen"
+            android:theme="@style/ColorTheme.NoActionBar" />
+        <activity
+            android:name=".transactionScreen"
+            android:label="@string/title_activity_transaction_screen"
+            android:theme="@style/ColorTheme.NoActionBar" />
+        <activity
+            android:name=".outletScreen"
+            android:label="@string/title_activity_outlet_screen"
+            android:theme="@style/ColorTheme.NoActionBar" />
     </application>
 
 </manifest>
