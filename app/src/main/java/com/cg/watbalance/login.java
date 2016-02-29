@@ -22,6 +22,7 @@ import com.cg.watbalance.preferences.Encryption;
 import com.cg.watbalance.service.Service;
 
 import org.apache.commons.lang3.text.WordUtils;
+import org.joda.time.DateTime;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -91,6 +92,7 @@ public class login extends AppCompatActivity {
                         myPrefEditor.apply();
 
                         startRepeat();
+                        setTermEnd();
 
                         Intent myIntent = new Intent(login.this, balanceScreen.class);
                         startActivity(myIntent);
@@ -132,6 +134,59 @@ public class login extends AppCompatActivity {
         PendingIntent newPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, Service.class), 0);
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(),
                 AlarmManager.INTERVAL_FIFTEEN_MINUTES, newPendingIntent);
+    }
+
+    public void setTermEnd() {
+        int month = DateTime.now().getMonthOfYear();
+        int year = DateTime.now().getYear();
+        int day = DateTime.now().getDayOfMonth();
+
+        switch (month) {
+            case 1:
+            case 2:
+            case 3: {
+                myPrefEditor.putString("termEnd", year + ".04.20");
+                break;
+            }
+            case 4: {
+                if (day > 20) {
+                    myPrefEditor.putString("termEnd", year + ".08.20");
+                } else {
+                    myPrefEditor.putString("termEnd", year + ".04.20");
+                }
+                break;
+            }
+            case 5:
+            case 6:
+            case 7: {
+                myPrefEditor.putString("termEnd", year + ".08.20");
+                break;
+            }
+            case 8: {
+                if (day > 20) {
+                    myPrefEditor.putString("termEnd", year + ".12.20");
+                } else {
+                    myPrefEditor.putString("termEnd", year + ".08.20");
+                }
+                break;
+            }
+            case 9:
+            case 10:
+            case 11: {
+                myPrefEditor.putString("termEnd", year + ".12.20");
+                break;
+            }
+            case 12: {
+                if (day > 20) {
+                    myPrefEditor.putString("termEnd", (year + 1) + ".04.20");
+                } else {
+                    myPrefEditor.putString("termEnd", year + ".12.20");
+                }
+                break;
+            }
+        }
+        myPrefEditor.apply();
+        Log.d("TERM END", myPreferences.getString("termEnd", "Unknown"));
     }
 
 }

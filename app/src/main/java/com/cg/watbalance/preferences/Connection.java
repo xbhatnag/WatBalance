@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cg.watbalance.data.BalanceData;
+import com.cg.watbalance.data.OutletData;
 import com.cg.watbalance.data.transaction.TransactionData;
 
 import org.jsoup.Jsoup;
@@ -22,6 +23,9 @@ public abstract class Connection {
 
     BalanceData myBalData;
     TransactionData myTransData;
+    OutletData myOutletData;
+    String outletResponse;
+    String buildingResponse;
 
     public Connection(ConnectionDetails newConnDetails, Context context) {
         myContext = context;
@@ -37,6 +41,9 @@ public abstract class Connection {
         // Add the request to the RequestQueue.
         queue.add(createBalanceRequest());
         queue.add(createTransHistoryRequest());
+        queue.add(createMenuRequest());
+        queue.add(createOutletRequest());
+        queue.add(createBuildingRequest());
     }
 
     private StringRequest createBalanceRequest() {
@@ -87,6 +94,9 @@ public abstract class Connection {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        myOutletData = new OutletData();
+                        myOutletData.setOutletData(response);
+                        onDataReceive();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -96,10 +106,12 @@ public abstract class Connection {
     }
 
     private StringRequest createOutletRequest() {
-        return new StringRequest(Request.Method.GET, myConnDetails.getFoodURL(),
+        return new StringRequest(Request.Method.GET, myConnDetails.getOutletURL(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        outletResponse = response;
+                        onDataReceive();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -113,6 +125,8 @@ public abstract class Connection {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        buildingResponse = response;
+                        onDataReceive();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -122,8 +136,11 @@ public abstract class Connection {
     }
 
     private void onDataReceive() {
-        if (myBalData != null && myTransData != null) {
-            myBalData.setDailyBalance(myTransData);
+        if (myBalData != null && myTransData != null && myOutletData != null && outletResponse != null && buildingResponse != null) {
+            Log.d("DATA", "RECEIVED");
+            myBalData.setDailyBalance(myTransData, myContext);
+            myOutletData.setOutletStatus(outletResponse);
+            myTransData.setBuildingTitle(buildingResponse);
 
             FileManager myFM = new FileManager(myContext);
             myFM.openFileOutput("myBalData");
@@ -132,6 +149,10 @@ public abstract class Connection {
 
             myFM.openFileOutput("myTransData");
             myFM.writeData(myTransData);
+            myFM.closeFileOutput();
+
+            myFM.openFileOutput("myOutletData");
+            myFM.writeData(myOutletData);
             myFM.closeFileOutput();
 
             onComplete();

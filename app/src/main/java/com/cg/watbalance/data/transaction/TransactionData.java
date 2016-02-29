@@ -5,6 +5,8 @@ import android.graphics.Color;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -23,7 +25,6 @@ import lecho.lib.hellocharts.model.PointValue;
 
 public class TransactionData implements Serializable {
     private ArrayList<Transaction> myTransList;
-    private boolean set = false;
 
     public ArrayList<Transaction> getTransList() {
         return myTransList;
@@ -46,8 +47,22 @@ public class TransactionData implements Serializable {
             Tags.remove(0);
             myTransList.add(newTrans);
         }
+    }
 
-        set = true;
+    public void setBuildingTitle(String response) {
+        try {
+            JSONArray buildingArray = new JSONObject(response).getJSONArray("data");
+            for (int i = 0; i < myTransList.size(); i++) {
+                for (int j = 0; j < buildingArray.length(); j++) {
+                    String buildingCode = myTransList.get(i).getTitle().split("-")[0];
+                    if (buildingCode.equals(buildingArray.getJSONObject(j).getString("building_code"))) {
+                        myTransList.get(i).setTitle(buildingArray.getJSONObject(j).getString("building_name"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<PointValue> makeDayPointValues() {
@@ -104,13 +119,10 @@ public class TransactionData implements Serializable {
         return myXAxis;
     }
 
-    public boolean isSet() {
-        return set;
-    }
 
     public class Transaction implements Serializable {
         private String title;
-        private String type;
+        private int type;
         private DateTime date;
         private float amount;
 
@@ -124,16 +136,21 @@ public class TransactionData implements Serializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            title = myElement.getElementById("oneweb_financial_history_td_terminal").text();
+            title = myElement.getElementById("oneweb_financial_history_td_terminal").text().substring(7);
             if (title.contains("WAT-FS")) {
-                type = "Meal Plan";
+                type = 0; // 0 = Meal Plan
+                title = title.substring(7); // remove "WAT-FS"
             } else {
-                type = "Flex Dollars";
+                type = 1; // 1 = Flex Dollars
             }
         }
 
-        public String getPlace() {
-            return title.substring(7);
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String newTitle) {
+            title = newTitle;
         }
 
         public String getAmountString() {
@@ -153,7 +170,18 @@ public class TransactionData implements Serializable {
             return date;
         }
 
-        public String getType() {
+        public String getTypeString() {
+            switch (type) {
+                case 0: {
+                    return "Meal Plan";
+                }
+                default: {
+                    return "Flex Dollars";
+                }
+            }
+        }
+
+        public int getType() {
             return type;
         }
     }

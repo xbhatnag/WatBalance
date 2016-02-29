@@ -13,6 +13,7 @@ import android.util.Log;
 import com.cg.watbalance.R;
 import com.cg.watbalance.balanceScreen;
 import com.cg.watbalance.data.BalanceData;
+import com.cg.watbalance.data.OutletData;
 import com.cg.watbalance.data.transaction.TransactionData;
 import com.cg.watbalance.preferences.Connection;
 import com.cg.watbalance.preferences.ConnectionDetails;
@@ -47,6 +48,10 @@ public class Service extends BroadcastReceiver {
                 TransactionData myTransData = (TransactionData) myFM.readData();
                 myFM.closeFileInput();
 
+                myFM.openFileInput("myOutletData");
+                OutletData myOutletData = (OutletData) myFM.readData();
+                myFM.closeFileInput();
+
                 SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
                 if (myPreferences.getBoolean("dailyNotification", true)) {
                     createNotification(myBalData, context);
@@ -54,7 +59,8 @@ public class Service extends BroadcastReceiver {
 
                 Intent intent = new Intent("com.cg.WatBalance.newData")
                         .putExtra("myBalData", myBalData)
-                        .putExtra("myTransData", myTransData);
+                        .putExtra("myTransData", myTransData)
+                        .putExtra("myOutletData", myOutletData);
                 context.sendBroadcast(intent);
             }
 

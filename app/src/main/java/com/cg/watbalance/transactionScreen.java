@@ -28,6 +28,8 @@ import com.cg.watbalance.preferences.FileManager;
 import com.cg.watbalance.preferences.Preferences;
 import com.cg.watbalance.service.Service;
 
+import org.joda.time.DateTime;
+
 import lecho.lib.hellocharts.model.SelectedValue;
 import lecho.lib.hellocharts.view.LineChartView;
 
@@ -101,27 +103,25 @@ public class transactionScreen extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         final int id = item.getItemId();
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 switchScreen(id);
+                drawer.setDrawerListener(null);
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
-
             }
         });
         drawer.closeDrawer(GravityCompat.START);
@@ -156,6 +156,9 @@ public class transactionScreen extends AppCompatActivity
 
         SelectedValue sv = new SelectedValue(0, 0, SelectedValue.SelectedValueType.NONE);
         transChart.selectValue(sv);
+
+        TextView month = (TextView) findViewById(R.id.month);
+        month.setText(DateTime.now().monthOfYear().getAsText());
 
         ListView transList = (ListView) findViewById(R.id.transList);
         transList.setAdapter(new TransactionListAdapter(getApplicationContext(), myTransData.getTransList()));

@@ -48,7 +48,7 @@ public class balanceScreen extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Refreshing...", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.rootView), "Refreshing...", Snackbar.LENGTH_LONG).show();
                 sendBroadcast(new Intent(getApplicationContext(), Service.class));
             }
         });
@@ -56,6 +56,7 @@ public class balanceScreen extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -90,6 +91,9 @@ public class balanceScreen extends AppCompatActivity
         updateView(myBalData);
         IntentFilter myFilter = new IntentFilter("com.cg.WatBalance.newData");
         registerReceiver(myReceiver, myFilter);
+
+        Snackbar.make(findViewById(R.id.rootView), "Refreshing...", Snackbar.LENGTH_LONG).show();
+        sendBroadcast(new Intent(getApplicationContext(), Service.class));
     }
 
     @Override
@@ -97,7 +101,7 @@ public class balanceScreen extends AppCompatActivity
         // Handle navigation view item clicks here.
         final int id = item.getItemId();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -112,6 +116,7 @@ public class balanceScreen extends AppCompatActivity
             @Override
             public void onDrawerClosed(View drawerView) {
                 switchScreen(id);
+                drawer.setDrawerListener(null);
             }
 
             @Override
@@ -119,7 +124,7 @@ public class balanceScreen extends AppCompatActivity
 
             }
         });
-        drawer.closeDrawer(GravityCompat.START);
+        drawer.closeDrawers();
         return true;
     }
 
@@ -138,7 +143,7 @@ public class balanceScreen extends AppCompatActivity
         } else if (id == R.id.nav_about) {
             Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.about_dialog);
-            dialog.setTitle("WatBalance");
+            dialog.setTitle("About");
             dialog.show();
         }
     }

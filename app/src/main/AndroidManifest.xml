@@ -39,6 +39,7 @@
         <activity
             android:name=".balanceScreen"
             android:label="@string/title_activity_balance_screen"
+            android:screenOrientation="portrait"
             android:theme="@style/ColorTheme.NoActionBar" />
         <activity
             android:name=".transactionScreen"
@@ -47,6 +48,7 @@
         <activity
             android:name=".outletScreen"
             android:label="@string/title_activity_outlet_screen"
+            android:screenOrientation="portrait"
             android:theme="@style/ColorTheme.NoActionBar" />
     </application>
 

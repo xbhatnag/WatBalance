@@ -7,6 +7,29 @@
             android:summary="Allow WatBalance to display Balance Information in the Notification Tray"
             android:title="Daily Notifications" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="Daily Balance">
+        <com.cg.watbalance.preferences.DatePreference
+            android:key="termEnd"
+            android:summary="Date on which current Term ends"
+            android:title="Term End" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/dailyBalanceChoice"
+            android:entryValues="@array/dailyBalanceChoiceValues"
+            android:key="dailyBalanceChoice"
+            android:summary="Balance used for Daily Balance calculation"
+            android:title="Balance Choice" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:enabled="false"
+            android:key="customDailyBalance"
+            android:summary="Feature coming soon"
+            android:title="Custom Daily Balance" />
+        <EditTextPreference
+            android:dependency="customDailyBalance"
+            android:key="customLimit"
+            android:title="Custom Limit" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="About">
         <Preference
             android:summary="Developed by Xyan Bhatnagar"

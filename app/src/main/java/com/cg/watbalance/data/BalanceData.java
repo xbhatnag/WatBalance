@@ -1,6 +1,8 @@
 package com.cg.watbalance.data;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 
 import com.cg.watbalance.data.transaction.TransactionData;
@@ -13,11 +15,7 @@ import org.jsoup.select.Elements;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-
-import lecho.lib.hellocharts.model.PieChartData;
-import lecho.lib.hellocharts.model.SliceValue;
 
 public class BalanceData implements Serializable {
     private float MP = 0;
@@ -42,52 +40,52 @@ public class BalanceData implements Serializable {
         }
     }
 
-    public void setDailyBalance(TransactionData myTransData) {
-        float totalAmt = 0;
+    public void setDailyBalance(TransactionData myTransData, Context context) {
+        todaySpent = 0;
         ArrayList<TransactionData.Transaction> myTransList = myTransData.getTransList();
-        for (int i = 0; i < myTransList.size(); i++) {
-            if (myTransList.get(i).getDate().withTimeAtStartOfDay().equals(DateTime.now().withTimeAtStartOfDay())) {
-                totalAmt += myTransList.get(i).getAmount();
+
+        SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int DailyBalConfig = Integer.parseInt(myPreferences.getString("dailyBalanceChoice", "1"));
+
+        DateTime endOfTerm = new DateTime(2016, 4, 23, 0, 0);
+        DateTime today = DateTime.now().withTimeAtStartOfDay();
+        int daysToTermEnd = Days.daysBetween(today, endOfTerm).getDays();
+
+        switch (DailyBalConfig) {
+            case 2: {
+                for (int i = 0; i < myTransList.size(); i++) {
+                    boolean isToday = myTransList.get(i).getDate().withTimeAtStartOfDay().equals(today);
+                    boolean isMealPlan = (myTransList.get(i).getType() == 0);
+                    if (isToday && isMealPlan) {
+                        todaySpent += myTransList.get(i).getAmount();
+                    }
+                }
+                dailyBalance = (MP - todaySpent) / daysToTermEnd;
+                break;
+            }
+            case 3: {
+                for (int i = 0; i < myTransList.size(); i++) {
+                    boolean isToday = myTransList.get(i).getDate().withTimeAtStartOfDay().equals(today);
+                    boolean isFlexDollar = (myTransList.get(i).getType() == 1);
+                    if (isToday && isFlexDollar) {
+                        todaySpent += myTransList.get(i).getAmount();
+                    }
+                }
+                dailyBalance = (FD - todaySpent) / daysToTermEnd;
+                break;
+            }
+            default: {
+                for (int i = 0; i < myTransList.size(); i++) {
+                    boolean isToday = myTransList.get(i).getDate().withTimeAtStartOfDay().equals(today);
+                    if (isToday) {
+                        todaySpent += myTransList.get(i).getAmount();
+                    }
+                }
+                dailyBalance = (Total - todaySpent) / daysToTermEnd;
+                break;
             }
         }
-        DateTime endOfTerm = new DateTime(2016, 4, 23, 0, 0);
-        DateTime today = DateTime.now().withTime(0, 0, 0, 0);
-        int daysToTermEnd = Days.daysBetween(today, endOfTerm).getDays();
-        todaySpent = totalAmt;
-        dailyBalance = (Total - todaySpent) / daysToTermEnd;
-    }
 
-    public PieChartData makePieChartData() {
-        List<SliceValue> mySliceValues = new ArrayList<>();
-
-        SliceValue mpSlice = new SliceValue(MP, Color.parseColor("#F44336"));
-        if (MP == 0) {
-            mpSlice.setLabel("");
-        } else {
-            mpSlice.setLabel(NumberFormat.getCurrencyInstance(Locale.CANADA).format(MP));
-        }
-        mySliceValues.add(mpSlice);
-
-        SliceValue fdSlice = new SliceValue(FD, Color.parseColor("#9C27B0"));
-        if (FD == 0) {
-            fdSlice.setLabel("");
-        } else {
-            fdSlice.setLabel(NumberFormat.getCurrencyInstance(Locale.CANADA).format(FD));
-        }
-        mySliceValues.add(fdSlice);
-
-        SliceValue otherSlice = new SliceValue(Other, Color.parseColor("#FFC107"));
-        if (Other == 0) {
-            otherSlice.setLabel("");
-        } else {
-            otherSlice.setLabel(NumberFormat.getCurrencyInstance(Locale.CANADA).format(Other));
-        }
-        mySliceValues.add(otherSlice);
-
-        PieChartData myPieChartData = new PieChartData(mySliceValues);
-        myPieChartData.setHasLabels(true);
-        myPieChartData.finish();
-        return myPieChartData;
     }
 
     public String getMPString() {

@@ -13,10 +13,23 @@
         android:id="@+id/transChart"
         android:layout_width="match_parent"
         android:layout_height="200sp"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingEnd="@dimen/activity_vertical_margin"
         android:paddingStart="@dimen/activity_vertical_margin"
         android:paddingTop="@dimen/activity_horizontal_margin" />
+
+    <TextView
+        android:id="@+id/month"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorMaterialGreen"
+        android:elevation="2dp"
+        android:padding="8dp"
+        android:text="Month"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/transList"
