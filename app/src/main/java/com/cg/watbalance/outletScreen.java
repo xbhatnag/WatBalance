@@ -155,6 +155,7 @@ public class outletScreen extends AppCompatActivity
 
     public void updateView(OutletData myOutletData) {
         final OutletData.Menu REVMenu = myOutletData.findMenu(7);
+        final Context myContext = this;
 
         if (REVMenu != null) {
             TextView outletName = (TextView) findViewById(R.id.outletName1);
@@ -173,8 +174,8 @@ public class outletScreen extends AppCompatActivity
             REV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    lunchListView.setAdapter(new MenuListAdapter(getApplicationContext(), REVMenu.getLunch().getFoodList()));
-                    dinnerListView.setAdapter(new MenuListAdapter(getApplicationContext(), REVMenu.getDinner().getFoodList()));
+                    lunchListView.setAdapter(new MenuListAdapter(myContext, REVMenu.getLunch().getFoodList()));
+                    dinnerListView.setAdapter(new MenuListAdapter(myContext, REVMenu.getDinner().getFoodList()));
 
                     lunchListView.setEmptyView(findViewById(R.id.empty_lunch));
                     dinnerListView.setEmptyView(findViewById(R.id.empty_dinner));
@@ -203,16 +204,16 @@ public class outletScreen extends AppCompatActivity
             V1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    lunchListView.setAdapter(new MenuListAdapter(getApplicationContext(), V1Menu.getLunch().getFoodList()));
-                    dinnerListView.setAdapter(new MenuListAdapter(getApplicationContext(), V1Menu.getDinner().getFoodList()));
+                    lunchListView.setAdapter(new MenuListAdapter(myContext, V1Menu.getLunch().getFoodList()));
+                    dinnerListView.setAdapter(new MenuListAdapter(myContext, V1Menu.getDinner().getFoodList()));
 
                     lunchListView.setEmptyView(findViewById(R.id.empty_lunch));
                     dinnerListView.setEmptyView(findViewById(R.id.empty_dinner));
                 }
             });
 
-            lunchListView.setAdapter(new MenuListAdapter(this, V1Menu.getLunch().getFoodList()));
-            dinnerListView.setAdapter(new MenuListAdapter(this, V1Menu.getDinner().getFoodList()));
+            lunchListView.setAdapter(new MenuListAdapter(myContext, V1Menu.getLunch().getFoodList()));
+            dinnerListView.setAdapter(new MenuListAdapter(myContext, V1Menu.getDinner().getFoodList()));
 
             lunchListView.setEmptyView(findViewById(R.id.empty_lunch));
             dinnerListView.setEmptyView(findViewById(R.id.empty_dinner));
