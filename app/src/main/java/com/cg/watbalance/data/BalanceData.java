@@ -9,6 +9,8 @@ import com.cg.watbalance.data.transaction.TransactionData;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -25,6 +27,7 @@ public class BalanceData implements Serializable {
     private float dailyBalance = 0;
     private float todaySpent = 0;
     private DateTime Date;
+    private boolean DatePassed = false;
 
     public void setBalanceData(Document myDoc) {
         Elements myTDTags = myDoc.getElementsByTag("TD");
@@ -47,45 +50,50 @@ public class BalanceData implements Serializable {
         SharedPreferences myPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         int DailyBalConfig = Integer.parseInt(myPreferences.getString("dailyBalanceChoice", "1"));
 
-        DateTime endOfTerm = new DateTime(2016, 4, 23, 0, 0);
-        DateTime today = DateTime.now().withTimeAtStartOfDay();
-        int daysToTermEnd = Days.daysBetween(today, endOfTerm).getDays();
+        DateTimeFormatter myFormat = DateTimeFormat.forPattern("yyyy.MM.dd");
 
-        switch (DailyBalConfig) {
-            case 2: {
-                for (int i = 0; i < myTransList.size(); i++) {
-                    boolean isToday = myTransList.get(i).getDate().withTimeAtStartOfDay().equals(today);
-                    boolean isMealPlan = (myTransList.get(i).getType() == 0);
-                    if (isToday && isMealPlan) {
-                        todaySpent += myTransList.get(i).getAmount();
+        DateTime endOfTerm = myFormat.parseDateTime(myPreferences.getString("termEnd", DateTime.now().toString(myFormat)));
+        DateTime today = DateTime.now().withTimeAtStartOfDay();
+
+        if (endOfTerm.isBefore(today)) {
+            DatePassed = true;
+        } else {
+            int daysToTermEnd = Days.daysBetween(today, endOfTerm).getDays();
+            switch (DailyBalConfig) {
+                case 2: {
+                    for (int i = 0; i < myTransList.size(); i++) {
+                        boolean isToday = myTransList.get(i).getDate().withTimeAtStartOfDay().equals(today);
+                        boolean isMealPlan = (myTransList.get(i).getType() == 0);
+                        if (isToday && isMealPlan) {
+                            todaySpent += myTransList.get(i).getAmount();
+                        }
                     }
+                    dailyBalance = (MP - todaySpent) / daysToTermEnd;
+                    break;
                 }
-                dailyBalance = (MP - todaySpent) / daysToTermEnd;
-                break;
-            }
-            case 3: {
-                for (int i = 0; i < myTransList.size(); i++) {
-                    boolean isToday = myTransList.get(i).getDate().withTimeAtStartOfDay().equals(today);
-                    boolean isFlexDollar = (myTransList.get(i).getType() == 1);
-                    if (isToday && isFlexDollar) {
-                        todaySpent += myTransList.get(i).getAmount();
+                case 3: {
+                    for (int i = 0; i < myTransList.size(); i++) {
+                        boolean isToday = myTransList.get(i).getDate().withTimeAtStartOfDay().equals(today);
+                        boolean isFlexDollar = (myTransList.get(i).getType() == 1);
+                        if (isToday && isFlexDollar) {
+                            todaySpent += myTransList.get(i).getAmount();
+                        }
                     }
+                    dailyBalance = (FD - todaySpent) / daysToTermEnd;
+                    break;
                 }
-                dailyBalance = (FD - todaySpent) / daysToTermEnd;
-                break;
-            }
-            default: {
-                for (int i = 0; i < myTransList.size(); i++) {
-                    boolean isToday = myTransList.get(i).getDate().withTimeAtStartOfDay().equals(today);
-                    if (isToday) {
-                        todaySpent += myTransList.get(i).getAmount();
+                default: {
+                    for (int i = 0; i < myTransList.size(); i++) {
+                        boolean isToday = myTransList.get(i).getDate().withTimeAtStartOfDay().equals(today);
+                        if (isToday) {
+                            todaySpent += myTransList.get(i).getAmount();
+                        }
                     }
+                    dailyBalance = (Total - todaySpent) / daysToTermEnd;
+                    break;
                 }
-                dailyBalance = (Total - todaySpent) / daysToTermEnd;
-                break;
             }
         }
-
     }
 
     public String getMPString() {
@@ -116,6 +124,9 @@ public class BalanceData implements Serializable {
         return NumberFormat.getCurrencyInstance(Locale.CANADA).format(dailyBalance + todaySpent);
     }
 
+    public Boolean getDatePassed() {
+        return DatePassed;
+    }
     public String getDateString() {
         String txt = DateUtils.getRelativeTimeSpanString(Date.getMillis()).toString();
         if (txt.equals("0 minutes ago")) {

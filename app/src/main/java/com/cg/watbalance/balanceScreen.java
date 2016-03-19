@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cg.watbalance.data.BalanceData;
@@ -162,13 +163,32 @@ public class balanceScreen extends AppCompatActivity
         other.setText(myBalData.getOtherString());
 
         TextView dailyTot = (TextView) findViewById(R.id.dayBalance);
-        dailyTot.setText(myBalData.getDailyBalanceString());
-
         TextView todaySpent = (TextView) findViewById(R.id.todaySpent);
-        todaySpent.setText(myBalData.getTodaySpentString());
-
         TextView todayLeft = (TextView) findViewById(R.id.todayLeft);
-        todayLeft.setText(myBalData.getTodayLeftString());
+
+        TextView updateText = (TextView) findViewById(R.id.updateText);
+        updateText.setText(myBalData.getDateString());
+
+        RelativeLayout todaySpentRow = (RelativeLayout) findViewById(R.id.spentTodayRow);
+        RelativeLayout todayLeftRow = (RelativeLayout) findViewById(R.id.todayLeftRow);
+        RelativeLayout datePassed = (RelativeLayout) findViewById(R.id.datePassed);
+
+
+        if (myBalData.getDatePassed()) {
+            dailyTot.setVisibility(View.GONE);
+            todaySpentRow.setVisibility(View.GONE);
+            todayLeftRow.setVisibility(View.GONE);
+            datePassed.setVisibility(View.VISIBLE);
+        } else {
+            dailyTot.setVisibility(View.VISIBLE);
+            todaySpentRow.setVisibility(View.VISIBLE);
+            todayLeftRow.setVisibility(View.VISIBLE);
+            datePassed.setVisibility(View.GONE);
+
+            dailyTot.setText(myBalData.getDailyBalanceString());
+            todaySpent.setText(myBalData.getTodaySpentString());
+            todayLeft.setText(myBalData.getTodayLeftString());
+        }
     }
 
     @Override

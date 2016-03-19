@@ -54,7 +54,10 @@ public class login extends AppCompatActivity {
         forgotPIN = (TextView) findViewById(R.id.forgotPIN);
         myPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-        if (myPreferences.getString("PinNum", "0000").length() > 6) {
+        int versionCode = myPreferences.getInt("versionCode", 1);
+        boolean login = myPreferences.getBoolean("login", false);
+
+        if (versionCode == BuildConfig.VERSION_CODE && login) {
             startRepeat();
 
             //Go to Launch Screen
@@ -89,6 +92,8 @@ public class login extends AppCompatActivity {
                         myPrefEditor = myPreferences.edit();
                         myPrefEditor.putString("IDNum", IDNum.getText().toString());
                         myPrefEditor.putString("PinNum", encryptedPIN);
+                        myPrefEditor.putInt("versionCode", BuildConfig.VERSION_CODE);
+                        myPrefEditor.putBoolean("login", true);
                         myPrefEditor.apply();
 
                         startRepeat();
@@ -101,7 +106,6 @@ public class login extends AppCompatActivity {
 
                     @Override
                     public void beforeConnect() {
-
                     }
 
                     @Override
@@ -186,7 +190,6 @@ public class login extends AppCompatActivity {
             }
         }
         myPrefEditor.apply();
-        Log.d("TERM END", myPreferences.getString("termEnd", "Unknown"));
     }
 
 }
