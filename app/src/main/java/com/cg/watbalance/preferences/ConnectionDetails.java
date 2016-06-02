@@ -3,7 +3,7 @@ package com.cg.watbalance.preferences;
 import org.joda.time.DateTime;
 
 public class ConnectionDetails {
-    final String uWaterlooURL = "https://account.watcard.uwaterloo.ca/cgi-bin/OneWeb.exe?";
+    final String uWaterlooURL = "https://watcard.uwaterloo.ca/oneweb/Scripts/OneWeb.exe?";
     final String APIURL = "https://api.uwaterloo.ca/v2/";
     final String APIKey = "?key=907f2381ac84737b6bfe0e41d159fbee";
     final String FoodURL = APIURL + "foodservices/menu.json" + APIKey;

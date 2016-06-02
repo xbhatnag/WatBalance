@@ -68,6 +68,8 @@ public class TransactionData implements Serializable {
     public List<PointValue> makeDayPointValues() {
         List<PointValue> myPointList = new ArrayList<>();
 
+        if(myTransList.size() == 0) return myPointList;
+
         Transaction firstTrans = myTransList.get(0);
         DateTime lastDate = firstTrans.getDate();
         PointValue myPoint = new PointValue(lastDate.getDayOfMonth(), -firstTrans.getAmount());

@@ -154,14 +154,12 @@ public class transactionScreen extends AppCompatActivity
         transChart.setZoomEnabled(false);
         transChart.setValueSelectionEnabled(true);
 
-        SelectedValue sv = new SelectedValue(0, 0, SelectedValue.SelectedValueType.NONE);
-        transChart.selectValue(sv);
-
         TextView month = (TextView) findViewById(R.id.month);
         month.setText(DateTime.now().monthOfYear().getAsText());
 
         ListView transList = (ListView) findViewById(R.id.transList);
         transList.setAdapter(new TransactionListAdapter(getApplicationContext(), myTransData.getTransList()));
+        transList.setEmptyView(findViewById(R.id.empty_transactions));
     }
 
     @Override
