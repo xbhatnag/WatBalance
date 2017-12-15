@@ -1,8 +1,10 @@
 # WatBalance
-### Supplies WatCard Information for students at the University of Waterloo.
 
-### Download
-<a href="https://play.google.com/store/apps/details?id=com.cg.watbalance">Play Store Link</a>
+### DEPRECATED
+Changes to the WatCard API now prevent accessing WatCard balance information.
+Consider using alternatives like WatISpend, UWallet or the official UWaterloo Portal.
+
+### Supplies WatCard Information for students at the University of Waterloo.
 
 ### Features
 * Checks WatCard Balance by querying UWaterloo Servers with Student ID Number and WatCard PIN.
